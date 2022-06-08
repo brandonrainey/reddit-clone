@@ -1,12 +1,14 @@
 import React from 'react'
 import Image from 'next/image'
-import { AiFillHome } from 'react-icons/ai'
-import { FiChevronDown } from 'react-icons/fi'
-import { BsSearch } from 'react-icons/bs'
+import { AiFillHome, AiOutlinePlus } from 'react-icons/ai'
+import { FiChevronDown, FiBell } from 'react-icons/fi'
+import { BsSearch, BsArrowUpRightCircle, BsFilterCircle, BsChatDots, BsMegaphone } from 'react-icons/bs'
+import { BiVideoRecording } from 'react-icons/bi'
+import { IoLogoReddit } from 'react-icons/io'
 
 export default function Header() {
   return (
-    <div className="flex bg-gray-300 h-14 pt-2 pb-2">
+    <div className="flex border-b h-14 pt-2 pb-2">
       <div className="w-14 h-14 pl-2 pr-2">
         <Image
           src="/logo.png"
@@ -46,18 +48,25 @@ export default function Header() {
         />
       </form>
 
-      <div>
-        <div>
-          <img />
-          <img />
-          <img />
+      <div className='flex mr-2'>
+        <div className=' h-full items-center gap-4 pr-2 hidden sm:flex'>
+          <BsArrowUpRightCircle className='w-6 h-6'/>
+          <BsFilterCircle className='w-6 h-6'/>
+          <BiVideoRecording className='w-6 h-6'/>
         </div>
-        <div>
-          <img />
-          <img />
-          <img />
+        <div className='h-full border-x border-black hidden sm:inline'></div>
+        <div className='flex h-full items-center gap-4 pl-2'>
+          <BsChatDots className='w-6 h-6'/>
+          <FiBell className='w-6 h-6'/>
+          <AiOutlinePlus className='w-6 h-6'/>
+          <BsMegaphone className='w-8 h-8 bg-gray-200 rounded-full p-1'/>
         </div>
-        <div></div>
+        
+      </div>
+
+      <div className='flex w-40 border border-gray-200 rounded justify-center items-center font-semibold mr-2 gap-2'>
+        <IoLogoReddit className='w-6 h-full hidden sm:inline'/>
+        <FiChevronDown />
       </div>
     </div>
   )
