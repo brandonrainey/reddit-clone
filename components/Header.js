@@ -8,7 +8,7 @@ import { IoLogoReddit } from 'react-icons/io'
 
 export default function Header() {
   return (
-    <div className="flex border-b h-14 pt-2 pb-2">
+    <div className="flex border-b h-14 pt-2 pb-2 w-full">
       <div className="w-14 h-14 pl-2 pr-2">
         <Image
           src="/logo.png"
