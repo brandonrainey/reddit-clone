@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { AiFillHome, AiOutlinePlus } from 'react-icons/ai'
 import { FiChevronDown, FiBell } from 'react-icons/fi'
@@ -14,9 +14,32 @@ import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function Header() {
-  const {data : session} = useSession()
+  const { data: session } = useSession()
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(null)
+
+  const userMenu = useRef()
+
+  const openMenu = useRef()
+
+  
+
+  const closeOpenMenus = (e)=>{
+    if(userMenu.current && open && !userMenu.current.contains(e.target) && !openMenu.current.contains(e.target)){
+      setOpen(false)
+    }
+}
+
+  // Do something after component renders
+  useEffect(() => {
+    document.addEventListener('mousedown', closeOpenMenus);
+
+    // clean up function before running new effect
+    return () => {
+        document.removeEventListener('mousedown', closeOpenMenus);
+    }
+  }, [open])
+
 
   return (
     <div className="flex border-b h-14 pt-2 pb-2 w-full">
@@ -74,15 +97,33 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex w-40 border border-gray-200 rounded justify-center items-center font-semibold mr-2 gap-2 cursor-pointer relative" onClick={() => setOpen(!open)}>
+      <div
+        className={`flex w-40 border border-gray-200 rounded justify-center items-center font-semibold mr-2 gap-2 cursor-pointer relative ${session ? 'px-1' : ''} `}
+        onClick={() => setOpen(!open)} ref={userMenu}
+      >
+
         <IoLogoReddit className="w-6 h-full hidden sm:inline" />
+        <div className='flex flex-col'>
+          <p className='truncate text-xs'>{session?.user?.name}</p>
+          {session ? (<p className='text-xs text-gray-400'>1 Karma</p>) : null}
+          
+        </div>
+        
         <FiChevronDown />
       </div>
-      {open ? (<div className='absolute border rounded bg-gray-600 right-2 top-12 w-48 h-96'>
-        {session ? (<div className='bg-blue-400' onClick={() => signOut()}>Sign Out</div>) : (<div className='bg-blue-400' onClick={() => signIn()}>Sign In</div>)}
-        
-      </div>) : null}
-      
+      {open ? (
+        <div className="flex absolute border rounded bg-white right-2 top-12 w-48 h-96 shadow justify-center" ref={openMenu}>
+          {session ? (
+            <div className="flex border-2 border-blue-500 text-blue-500 w-20 text-center justify-center h-8 items-center rounded-2xl mt-12 cursor-pointer" onClick={() => signOut()}>
+              Sign Out
+            </div>
+          ) : (
+            <div className="flex border-2 border-blue-500 text-blue-500 w-20 text-center justify-center h-8 items-center rounded-2xl mt-12 cursor-pointer" onClick={() => signIn()}>
+              Sign In
+            </div>
+          )}
+        </div>
+      ) : null}
     </div>
   )
 }
