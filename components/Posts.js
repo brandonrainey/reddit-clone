@@ -5,13 +5,17 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
   updateDoc,
-  doc, 
+  doc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function Posts({ posts, setPosts, reddit }) {
-  const [pressed, setPressed] = useState(false)
+  const [pressedUp, setPressedUp] = useState(false)
+
+  const [pressedDown, setPressedDown] = useState(false)
 
   const [postIndex, setPostIndex] = useState()
 
@@ -19,15 +23,56 @@ export default function Posts({ posts, setPosts, reddit }) {
 
   const colRef = collection(db, reddit)
 
+  const { data: session } = useSession()
+
+  
+
   async function upvotePost() {
     const docRef = doc(db, reddit, postId)
 
-    await updateDoc(docRef, {
-      votes: posts[postIndex].votes + 1,
-    })
+    const votedRef = doc(db, 'posts', postId)
+
+    const voteSnap = await getDoc(votedRef)
+
+    const current = session.user.name
+
+    const currentUser = voteSnap.data()[current]
+
+    if (currentUser != 'upvoted') {
+      await updateDoc(docRef, {
+        votes: posts[postIndex].votes + 1,
+      })
+
+      await updateDoc(votedRef, {
+        [session.user.name]: 'upvoted',
+      })
+    }
+  }
+
+  async function downvotePost() {
+    const docRef = doc(db, reddit, postId)
+
+    const votedRef = doc(db, 'posts', postId)
+
+    const voteSnap = await getDoc(votedRef)
+
+    const current = session.user.name
+
+    const currentUser = voteSnap.data()[current]
+
+    if (currentUser != 'downvoted') {
+      await updateDoc(docRef, {
+        votes: posts[postIndex].votes - 1,
+      })
+
+      await updateDoc(votedRef, {
+        [session.user.name]: 'downvoted',
+      })
+    }
   }
 
   useEffect(() => {
+    console.log(postIndex)
     getDocs(colRef).then((snapshot) => {
       snapshot.docs.forEach((doc, index) => {
         if (index == postIndex) {
@@ -38,9 +83,15 @@ export default function Posts({ posts, setPosts, reddit }) {
   }, [postIndex])
 
   useEffect(() => {
-    if (pressed) {
+    console.log(postIndex)
+    if (pressedUp) {
       upvotePost()
     }
+    if (pressedDown) {
+      downvotePost()
+    }
+
+    
   }, [postId])
 
   return (
@@ -54,14 +105,22 @@ export default function Posts({ posts, setPosts, reddit }) {
             <button
               onClick={() => {
                 setPostIndex(index)
-                setPressed(true)
+                setPressedUp(true)
               }}
             >
               <TbArrowBigTop className="w-6 h-6" />
             </button>
 
             <p>{item.votes}</p>
-            <TbArrowBigDown className="w-6 h-6" />
+            <button
+              onClick={() => {
+                setPostIndex(index)
+                setPressedDown(true)
+              }}
+            >
+              <TbArrowBigDown className="w-6 h-6" />
+            </button>
+            
           </div>
           {/* post */}
           <div className="flex flex-col w-full pl-2">
@@ -75,8 +134,8 @@ export default function Posts({ posts, setPosts, reddit }) {
               <p className="font-bold">{item.title}</p>
             </div>
             {/* content */}
-            <div>
-              <p>{item.content}</p>
+            <div className="">
+              <p className="truncate pr-8">{item.content}</p>
             </div>
             {/* bottom */}
             <div className="flex">

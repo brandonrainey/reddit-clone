@@ -4,11 +4,16 @@ import { db } from '../firebase'
 import Header from '../components/Header'
 import { useRouter } from 'next/router'
 import { v4 as uuidv4 } from 'uuid';
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function makePost() {
   const router = useRouter()
 
+  const { data: session } = useSession()
+
   const colRef = collection(db, 'stuff')
+
+  const voteRef = collection(db, 'posts')
 
   const [postContent, setPostContent] = useState('')
 
@@ -32,9 +37,13 @@ export default function makePost() {
       title: titleContent,
       content: postContent,
       id: uniqueId,
-      user: '',
+      user: session?.user?.name,
       votes: 0
 
+    })
+
+    setDoc(doc(db, 'posts', uniqueId), {
+      
     })
     setUniqueId(uuidv4())
   }

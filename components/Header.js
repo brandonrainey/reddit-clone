@@ -12,6 +12,7 @@ import {
 import { BiVideoRecording } from 'react-icons/bi'
 import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function Header() {
   const { data: session } = useSession()
@@ -21,6 +22,8 @@ export default function Header() {
   const userMenu = useRef()
 
   const openMenu = useRef()
+
+  
 
   
 
@@ -43,7 +46,9 @@ export default function Header() {
 
   return (
     <div className="flex border-b h-14 pt-2 pb-2 w-full">
-      <div className="w-14 h-14 pl-2 pr-2">
+
+      <Link href='/'>
+        <div className="w-14 h-14 pl-2 pr-2 cursor-pointer">
         <Image
           src="/logo.png"
           layout="fixed"
@@ -52,7 +57,11 @@ export default function Header() {
           objectFit="contain"
         />
       </div>
-      <div className="h-12 hidden md:inline w-14 mr-4">
+      </Link>
+      
+
+      <Link href='/'>
+        <div className="h-12 hidden md:inline w-14 mr-4 cursor-pointer">
         <Image
           src="/logoText.png"
           layout="fixed"
@@ -61,6 +70,8 @@ export default function Header() {
           objectFit="contain"
         />
       </div>
+      </Link>
+      
 
       <div className="flex items-center w-14 sm:w-56 hover:outline hover:outline-2 hover:outline-black mr-4 rounded-sm cursor-pointer">
         <div className="flex items-center gap-x-1 ml-1">
@@ -71,7 +82,7 @@ export default function Header() {
         <FiChevronDown className="ml-auto" />
       </div>
 
-      <form className="flex w-full mr-2">
+      <form className="flex w-full mr-2 min-w-search">
         <div className="flex h-full w-10 border border-r-0 border-black bg-white justify-center items-center rounded-tl rounded-bl">
           <BsSearch className="h-6 w-5" />
         </div>

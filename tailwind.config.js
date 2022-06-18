@@ -6,8 +6,10 @@ module.exports = {
   theme: {
     extend: {},
     minWidth: {
-      '3/5' : '60%'
-    }
+      '3/5' : '60%',
+      'search' : '80px'
+    },
+    
   },
   plugins: [],
 }
