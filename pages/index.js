@@ -19,9 +19,11 @@ import CreateReddit from '../components/CreateReddit'
 export default function Home() {
   const [reddit, setReddit] = useState('stuff')
 
+  const [communities, setCommunities] = useState([])
+
   const [posts, setPosts] = useState([])
 
-  const [openCreate, setOpenCreate] = useState(true)
+  const [openCreate, setOpenCreate] = useState(false)
 
   const colRef = collection(db, reddit)
 
@@ -52,7 +54,7 @@ export default function Home() {
           />
         </div>
         
-        <TopReddits openCreate={openCreate} setOpenCreate={setOpenCreate}/>
+        <TopReddits openCreate={openCreate} setOpenCreate={setOpenCreate} communities={communities} setCommunities={setCommunities}/>
       </div>
 
     </div>
