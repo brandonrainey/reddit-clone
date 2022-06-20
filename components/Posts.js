@@ -95,7 +95,7 @@ export default function Posts({ posts, setPosts, reddit }) {
   }, [postId])
 
   return (
-    <div className="flex  mt-4 flex-col">
+    <div className="flex  mt-4 flex-col ">
       {posts.map((item, index) => (
         <div
           className="flex mb-4 border border-gray-300 rounded-sm"

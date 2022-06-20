@@ -9,6 +9,9 @@ module.exports = {
       '3/5' : '60%',
       'search' : '80px'
     },
+    screens: {
+      'custom': '960px'
+    }
     
   },
   plugins: [],

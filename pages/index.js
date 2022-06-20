@@ -43,8 +43,8 @@ export default function Home() {
       <Header />
       {openCreate ? <CreateReddit openCreate={openCreate} setOpenCreate={setOpenCreate} reddit={reddit} setReddit={setReddit}/> : null}
       
-      <div className="flex w-11/12 max-w-3xl h-screen mt-6">
-        <div className="w-full flex flex-col">
+      <div className="flex w-full  h-screen mt-6 justify-center ">
+        <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 px-6 ">
           <CreatePost />
           <Posts
             posts={posts}

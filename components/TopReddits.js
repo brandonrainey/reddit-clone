@@ -4,7 +4,7 @@ import { BsReddit } from 'react-icons/bs'
 
 export default function TopReddits({ openCreate, setOpenCreate }) {
   return (
-    <div className="hidden w-3/5 border border-gray-300 h-96 ml-12 sm:flex flex-col rounded">
+    <div className="hidden w-60 border border-gray-300 h-96 ml-12 custom:flex flex-col rounded ">
       <div className="h-24 border w-full">Top Communities</div>
       <div className="w-full border h-12 flex items-center pr-2 pl-2 gap-3">
         <p>1</p>
