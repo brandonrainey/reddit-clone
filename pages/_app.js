@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import { SessionProvider } from 'next-auth/react'
-import { RedditProvider } from './context/reddit'
+import { RedditProvider } from '../components/context/reddit'
 
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {

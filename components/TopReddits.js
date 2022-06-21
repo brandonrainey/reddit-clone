@@ -1,7 +1,7 @@
 import React from 'react'
 import { FiChevronUp } from 'react-icons/fi'
 import { BsReddit } from 'react-icons/bs'
-import { useRedditContext } from '../pages/context/reddit'
+import { useRedditContext } from './context/reddit'
 
 export default function TopReddits({
   openCreate,

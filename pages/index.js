@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
-import { useRedditContext } from './context/reddit'
+import { useRedditContext } from '../components/context/reddit'
 
 export default function Home() {
   const [reddit, setReddit] = useRedditContext()
@@ -45,6 +45,7 @@ export default function Home() {
         setPosts((posts) => [...posts, doc.data()])
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reddit])
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function Home() {
         setCommunities((communities) => [...communities, doc.data().reddit])
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   

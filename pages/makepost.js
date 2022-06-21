@@ -5,7 +5,7 @@ import Header from '../components/Header'
 
 import { v4 as uuidv4 } from 'uuid'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useRedditContext } from './context/reddit'
+import { useRedditContext } from '../components/context/reddit'
 
 export default function MakePost() {
   

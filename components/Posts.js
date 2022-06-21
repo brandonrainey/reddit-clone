@@ -99,7 +99,7 @@ export default function Posts({ posts, setPosts, reddit }) {
       })
     })
 
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postIndex])
 
   useEffect(() => {
@@ -113,7 +113,7 @@ export default function Posts({ posts, setPosts, reddit }) {
       setPressedDown(false)
     }
 
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId])
 
   

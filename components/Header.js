@@ -41,6 +41,7 @@ export default function Header() {
     return () => {
         document.removeEventListener('mousedown', closeOpenMenus);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
 
@@ -55,6 +56,7 @@ export default function Header() {
           width={40}
           height={40}
           objectFit="contain"
+          alt='reddit icon'
         />
       </div>
       </Link>
@@ -68,6 +70,7 @@ export default function Header() {
           height={40}
           width={56}
           objectFit="contain"
+          alt='reddit text'
         />
       </div>
       </Link>
