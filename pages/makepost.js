@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { collection, addDoc, setDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
 import Header from '../components/Header'
-import { useRouter } from 'next/router'
+
 import { v4 as uuidv4 } from 'uuid'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRedditContext } from './context/reddit'
 
-export default function makePost() {
-  const router = useRouter()
+export default function MakePost() {
+  
+
+  const [reddit, setReddit] = useRedditContext()
 
   const { data: session } = useSession()
 
@@ -32,7 +35,7 @@ export default function makePost() {
   const sendPost = async (e) => {
     e.preventDefault()
 
-    await setDoc(doc(db, 'stuff', uniqueId), {
+    await setDoc(doc(db, 'stuff', reddit, 'posts', uniqueId), {
       title: titleContent,
       content: postContent,
       id: uniqueId,
@@ -43,6 +46,8 @@ export default function makePost() {
     setDoc(doc(db, 'posts', uniqueId), {})
     setUniqueId(uuidv4())
   }
+
+  console.log(reddit)
 
   return (
     <div className="flex flex-col items-center">

@@ -13,7 +13,7 @@ export default function CreateReddit({ openCreate, setOpenCreate }) {
   async function createCommunity(e) {
     e.preventDefault()
 
-    await setDoc(doc(db, communityContent, 'newreddit'), {})
+    await setDoc(doc(db, 'stuff', communityContent), {'reddit': communityContent})
 
     setOpenCreate(false)
   }

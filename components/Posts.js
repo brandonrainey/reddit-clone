@@ -19,38 +19,50 @@ export default function Posts({ posts, setPosts, reddit }) {
 
   const [postIndex, setPostIndex] = useState()
 
+  const [postNumber, setPostNumber] = useState()
+
   const [postId, setPostId] = useState()
 
-  const colRef = collection(db, reddit)
+  const colRef = collection(db, 'posts')
 
   const { data: session } = useSession()
 
   
 
   async function upvotePost() {
-    const docRef = doc(db, reddit, postId)
+    const docRef = doc(db, 'stuff', reddit, 'posts', postId)
 
     const votedRef = doc(db, 'posts', postId)
 
+    
     const voteSnap = await getDoc(votedRef)
+
+    
 
     const current = session.user.name
 
+    
     const currentUser = voteSnap.data()[current]
+
+    console.log(currentUser)
+    
 
     if (currentUser != 'upvoted') {
       await updateDoc(docRef, {
-        votes: posts[postIndex].votes + 1,
+        votes: posts[postNumber].votes + 1,
       })
 
       await updateDoc(votedRef, {
         [session.user.name]: 'upvoted',
       })
     }
+
+    setPostId('')
+    setPostIndex('')
   }
 
   async function downvotePost() {
-    const docRef = doc(db, reddit, postId)
+    const docRef = doc(db, 'stuff', reddit, 'posts', postId)
 
     const votedRef = doc(db, 'posts', postId)
 
@@ -60,39 +72,51 @@ export default function Posts({ posts, setPosts, reddit }) {
 
     const currentUser = voteSnap.data()[current]
 
+    console.log(currentUser)
+
     if (currentUser != 'downvoted') {
       await updateDoc(docRef, {
-        votes: posts[postIndex].votes - 1,
+        votes: posts[postNumber].votes - 1,
       })
 
       await updateDoc(votedRef, {
         [session.user.name]: 'downvoted',
       })
     }
+
+    setPostId('')
+    setPostIndex('')
   }
 
   useEffect(() => {
-    console.log(postIndex)
+    
     getDocs(colRef).then((snapshot) => {
       snapshot.docs.forEach((doc, index) => {
-        if (index == postIndex) {
+        
+        if (doc.id == postIndex) {
           setPostId(doc.id)
         }
       })
     })
+
+    
   }, [postIndex])
 
   useEffect(() => {
-    console.log(postIndex)
+    
     if (pressedUp) {
       upvotePost()
+      setPressedUp(false)
     }
     if (pressedDown) {
       downvotePost()
+      setPressedDown(false)
     }
 
     
   }, [postId])
+
+  
 
   return (
     <div className="flex  mt-4 flex-col ">
@@ -104,7 +128,8 @@ export default function Posts({ posts, setPosts, reddit }) {
           <div className="flex flex-col items-center bg-gray-50 w-10 pt-2">
             <button
               onClick={() => {
-                setPostIndex(index)
+                setPostNumber(index)
+                setPostIndex(item.id)
                 setPressedUp(true)
               }}
             >
@@ -114,7 +139,8 @@ export default function Posts({ posts, setPosts, reddit }) {
             <p>{item.votes}</p>
             <button
               onClick={() => {
-                setPostIndex(index)
+                setPostNumber(index)
+                setPostIndex(item.id)
                 setPressedDown(true)
               }}
             >
@@ -125,8 +151,8 @@ export default function Posts({ posts, setPosts, reddit }) {
           {/* post */}
           <div className="flex flex-col w-full pl-2">
             {/* reddit */}
-            <div className="flex">
-              <p>r/{reddit}</p>
+            <div className="flex flex-wrap">
+              <p className='mr-2'>r/{reddit}</p>
               <p>Posted by u/{item.user} 5 hours ago</p>
             </div>
             {/* title */}

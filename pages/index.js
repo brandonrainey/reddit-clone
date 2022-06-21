@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import CreatePost from '../components/CreatePost'
 import Header from '../components/Header'
 import Posts from '../components/Posts'
@@ -15,9 +15,12 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
+import { useRedditContext } from './context/reddit'
 
 export default function Home() {
-  const [reddit, setReddit] = useState('stuff')
+  const [reddit, setReddit] = useRedditContext()
+
+  
 
   const [communities, setCommunities] = useState([])
 
@@ -25,9 +28,15 @@ export default function Home() {
 
   const [openCreate, setOpenCreate] = useState(false)
 
-  const colRef = collection(db, reddit)
+  const colRef = collection(db, 'stuff')
 
-  const q = query(colRef, orderBy('votes', 'desc'))
+  const newRef = collection(db, 'stuff', 'reddits', reddit)
+
+  const postRef = collection(db, 'stuff', reddit, 'posts')
+
+  
+
+  const q = query(postRef, orderBy('votes', 'desc'))
 
   useEffect(() => {
     onSnapshot(q, (snapshot) => {
@@ -36,7 +45,19 @@ export default function Home() {
         setPosts((posts) => [...posts, doc.data()])
       })
     })
+  }, [reddit])
+
+  useEffect(() => {
+    onSnapshot(colRef, (snapshot) => {
+      setCommunities([])
+      snapshot.docs.forEach((doc) => {
+        setCommunities((communities) => [...communities, doc.data().reddit])
+      })
+    })
   }, [])
+
+  
+
 
   return (
     <div className="flex flex-col items-center">
