@@ -10,7 +10,8 @@ module.exports = {
       'search' : '80px'
     },
     screens: {
-      'custom': '960px'
+      'custom': '960px',
+      'small': '480px'
     }, borderWidth: {
       '1': '1px'
     }

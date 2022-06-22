@@ -46,15 +46,15 @@ export default function Header() {
 
 
   return (
-    <div className="flex border-b h-14 pt-2 pb-2 w-full">
+    <div className="flex border-b h-14 pt-2 pb-2 w-full ">
 
       <Link href='/'>
-        <div className="w-14 h-14 pl-2 pr-2 cursor-pointer">
+        <div className="flex w-14 h-full pl-2 pr-2 cursor-pointer items-center">
         <Image
           src="/logo.png"
           layout="fixed"
-          width={40}
-          height={40}
+          width={32}
+          height={32}
           objectFit="contain"
           alt='reddit icon'
         />
@@ -104,10 +104,10 @@ export default function Header() {
         </div>
         <div className="h-full border-x border-black hidden sm:inline"></div>
         <div className="flex h-full items-center gap-4 pl-2">
-          <BsChatDots className="w-6 h-6 cursor-pointer" />
-          <FiBell className="w-6 h-6 cursor-pointer" />
-          <AiOutlinePlus className="w-6 h-6 cursor-pointer" />
-          <BsMegaphone className="w-8 h-8 bg-gray-200 rounded-full p-1 cursor-pointer" />
+          <BsChatDots className="w-5 h-5 cursor-pointer" />
+          <FiBell className="w-5 h-5 cursor-pointer" />
+          <AiOutlinePlus className="w-5 h-5 cursor-pointer" />
+          <BsMegaphone className="w-7 h-7 bg-gray-200 rounded-full p-1 cursor-pointer" />
         </div>
       </div>
 
@@ -117,7 +117,7 @@ export default function Header() {
       >
 
         <IoLogoReddit className="w-6 h-full hidden sm:inline" />
-        <div className='flex flex-col'>
+        <div className={`${session ? 'flex' : 'hidden'} flex-col`}>
           <p className='truncate text-xs'>{session?.user?.name}</p>
           {session ? (<p className='text-xs text-gray-400'>1 Karma</p>) : null}
           
