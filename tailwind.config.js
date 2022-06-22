@@ -11,6 +11,8 @@ module.exports = {
     },
     screens: {
       'custom': '960px'
+    }, borderWidth: {
+      '1': '1px'
     }
     
   },

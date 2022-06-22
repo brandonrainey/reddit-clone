@@ -58,12 +58,12 @@ export default function MakePost() {
           <form onSubmit={sendPost} className="flex flex-col p-4">
             <input
               placeholder="Title "
-              className="border h-10 mb-2 rounded"
+              className="border-1 h-10 mb-2 rounded"
               onChange={handleTitleChange}
               value={titleContent}
             ></input>
             <input
-              className="w-full h-56 border mb-8 rounded"
+              className="w-full h-56 border-1 mb-8 rounded"
               placeholder="Text(optional)"
               onChange={handlePostChange}
               value={postContent}
@@ -71,7 +71,7 @@ export default function MakePost() {
 
             <button
               type="submit"
-              className="border bg-gray-600 w-16 p-1 rounded-3xl ml-auto"
+              className="border-1 bg-gray-600 w-16 p-1 rounded-3xl ml-auto"
               onClick={() => router.push('/')}
             >
               Post

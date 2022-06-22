@@ -25,7 +25,7 @@ export default function CreateReddit({ openCreate, setOpenCreate }) {
         <div className="flex flex-col gap-2" >
           <p className="font-medium border-b-2 pb-2">Create a Community</p>
           <label className="font-medium">Name</label>
-          <input className="border rounded p-1" placeholder="r/" value={communityContent} onChange={handleCommunityChange}></input>
+          <input className="border-1 rounded p-1" placeholder="r/" value={communityContent} onChange={handleCommunityChange}></input>
         </div>
 
         <div className="mt-auto ml-auto flex gap-4">

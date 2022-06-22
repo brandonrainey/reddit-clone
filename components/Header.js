@@ -86,12 +86,12 @@ export default function Header() {
       </div>
 
       <form className="flex w-full mr-2 min-w-search">
-        <div className="flex h-full w-10 border border-r-0 border-black bg-white justify-center items-center rounded-tl rounded-bl">
+        <div className="flex h-full w-10 border-t-1 border-b-1 border-l-1 border-black bg-white justify-center items-center rounded-tl rounded-bl">
           <BsSearch className="h-6 w-5" />
         </div>
 
         <input
-          className="w-full bg-white border border-l-0 border-black rounded-tr rounded-br focus:outline-0"
+          className="w-full bg-white  border-t-1 border-r-1  border-b-1 border-black rounded-tr rounded-br focus:outline-0"
           placeholder="Search Reddit"
         />
       </form>
@@ -112,7 +112,7 @@ export default function Header() {
       </div>
 
       <div
-        className={`flex w-40 border border-gray-200 rounded justify-center items-center font-semibold mr-2 gap-2 cursor-pointer relative ${session ? 'px-1' : ''} `}
+        className={`flex w-40 border-1 border-gray-200 rounded justify-center items-center font-semibold mr-2 gap-2 cursor-pointer relative ${session ? 'px-1' : ''} `}
         onClick={() => setOpen(!open)} ref={userMenu}
       >
 
@@ -126,7 +126,7 @@ export default function Header() {
         <FiChevronDown />
       </div>
       {open ? (
-        <div className="flex absolute border rounded bg-white right-2 top-12 w-48 h-96 shadow justify-center" ref={openMenu}>
+        <div className="flex absolute border-1 rounded bg-white right-2 top-12 w-48 h-96 shadow justify-center" ref={openMenu}>
           {session ? (
             <div className="flex border-2 border-blue-500 text-blue-500 w-20 text-center justify-center h-8 items-center rounded-2xl mt-12 cursor-pointer" onClick={() => signOut()}>
               Sign Out
