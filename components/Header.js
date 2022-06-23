@@ -14,7 +14,7 @@ import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
-export default function Header() {
+export default function Header({ reddit }) {
   const { data: session } = useSession()
 
   const [open, setOpen] = useState(null)
@@ -76,33 +76,33 @@ export default function Header() {
       </Link>
       
 
-      <div className="flex items-center w-14 sm:w-56 hover:outline hover:outline-2 hover:outline-black mr-4 rounded-sm cursor-pointer">
+      <div className="flex items-center w-14 sm:w-56 hover:outline hover:outline-1 hover:outline-black mr-4 rounded-sm cursor-pointer">
         <div className="flex items-center gap-x-1 ml-1">
           <AiFillHome />
-          <p className="hidden sm:inline">Home</p>
+          <p className="sm:flex hidden ">{`${reddit ? `r/${reddit}` : 'Home'}`}</p>
         </div>
 
         <FiChevronDown className="ml-auto" />
       </div>
 
-      <form className="flex w-full mr-2 min-w-search">
-        <div className="flex h-full w-10 border-t-1 border-b-1 border-l-1 border-black bg-white justify-center items-center rounded-tl rounded-bl">
+      <form className="flex w-full mr-2 min-w-search hover:border-blue-500 group">
+        <div className="flex h-full w-10 border-t-1 border-b-1 border-l-1 border-grey-600 group-hover:border-blue-500 justify-center items-center rounded-tl rounded-bl bg-blue-50">
           <BsSearch className="h-6 w-5" />
         </div>
 
         <input
-          className="w-full bg-white  border-t-1 border-r-1  border-b-1 border-black rounded-tr rounded-br focus:outline-0"
+          className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0"
           placeholder="Search Reddit"
         />
       </form>
 
       <div className="flex mr-2">
         <div className=" h-full items-center gap-4 pr-2 hidden sm:flex">
-          <BsArrowUpRightCircle className="w-6 h-6 cursor-pointer" />
-          <BsFilterCircle className="w-6 h-6 cursor-pointer" />
-          <BiVideoRecording className="w-6 h-6 cursor-pointer" />
+          <BsArrowUpRightCircle className="w-5 h-5 cursor-pointer" />
+          <BsFilterCircle className="w-5 h-5 cursor-pointer" />
+          <BiVideoRecording className="w-5 h-5 cursor-pointer" />
         </div>
-        <div className="h-full border-x border-black hidden sm:inline"></div>
+        <div className="h-full border-l-half border-grey-700 hidden sm:flex"></div>
         <div className="flex h-full items-center gap-4 pl-2">
           <BsChatDots className="w-5 h-5 cursor-pointer" />
           <FiBell className="w-5 h-5 cursor-pointer" />

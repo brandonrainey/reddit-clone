@@ -11,9 +11,18 @@ module.exports = {
     },
     screens: {
       'custom': '960px',
-      'small': '480px'
+      'small': '480px',
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '768px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
     }, borderWidth: {
-      '1': '1px'
+      '1': '1px',
+      'half': '0.5px'
     }
     
   },
