@@ -16,6 +16,7 @@ import {
 import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
 import { useRedditContext } from '../components/context/reddit'
+import Banner from '../components/Banner'
 
 export default function Home() {
   const [reddit, setReddit] = useRedditContext()
@@ -65,7 +66,7 @@ export default function Home() {
     <div className="flex flex-col items-center">
       <Header />
       {openCreate ? <CreateReddit openCreate={openCreate} setOpenCreate={setOpenCreate} reddit={reddit} setReddit={setReddit}/> : null}
-      
+      <Banner reddit={reddit}/>
       <div className="flex w-full  h-screen mt-6 justify-center ">
         <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
           <CreatePost />

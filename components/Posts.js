@@ -11,8 +11,12 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Posts({ posts, setPosts, reddit }) {
+  const router = useRouter()
+
   const [pressedUp, setPressedUp] = useState(false)
 
   const [pressedDown, setPressedDown] = useState(false)
@@ -27,24 +31,17 @@ export default function Posts({ posts, setPosts, reddit }) {
 
   const { data: session } = useSession()
 
-  
-
   async function upvotePost() {
     const docRef = doc(db, 'stuff', reddit, 'posts', postId)
 
     const votedRef = doc(db, 'posts', postId)
 
-    
     const voteSnap = await getDoc(votedRef)
-
-    
 
     const current = session.user.name
 
-    
     const currentUser = voteSnap.data()[current]
 
-    console.log(currentUser)
     
 
     if (currentUser != 'upvoted') {
@@ -72,7 +69,7 @@ export default function Posts({ posts, setPosts, reddit }) {
 
     const currentUser = voteSnap.data()[current]
 
-    console.log(currentUser)
+    
 
     if (currentUser != 'downvoted') {
       await updateDoc(docRef, {
@@ -89,10 +86,8 @@ export default function Posts({ posts, setPosts, reddit }) {
   }
 
   useEffect(() => {
-    
     getDocs(colRef).then((snapshot) => {
       snapshot.docs.forEach((doc, index) => {
-        
         if (doc.id == postIndex) {
           setPostId(doc.id)
         }
@@ -103,7 +98,6 @@ export default function Posts({ posts, setPosts, reddit }) {
   }, [postIndex])
 
   useEffect(() => {
-    
     if (pressedUp) {
       upvotePost()
       setPressedUp(false)
@@ -125,7 +119,7 @@ export default function Posts({ posts, setPosts, reddit }) {
           className="flex mb-4 border-1 border-gray-300 rounded-sm"
           key={index}
         >
-          <div className="flex flex-col items-center bg-gray-50 w-10 pt-2">
+          <div className="flex flex-col items-center bg-gray-50 w-10 self-center">
             <button
               onClick={() => {
                 setPostNumber(index)
@@ -146,26 +140,31 @@ export default function Posts({ posts, setPosts, reddit }) {
             >
               <TbArrowBigDown className="w-6 h-6" />
             </button>
-            
           </div>
           {/* post */}
           <div className="flex flex-col w-full pl-2">
             {/* reddit */}
-            <div className="flex flex-wrap">
-              <p className='mr-2'>r/{reddit}</p>
-              <p>Posted by u/{item.user} 5 hours ago</p>
+            <div className="flex flex-wrap items-center pt-1">
+              <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
+              <p className="text-sm text-slate-500">
+                Posted by u/{item.user} 5 hours ago
+              </p>
             </div>
             {/* title */}
             <div>
-              <p className="font-bold">{item.title}</p>
+              <p className="font-bold text-lg">{item.title}</p>
             </div>
             {/* content */}
             <div className="">
-              <p className="truncate pr-8">{item.content}</p>
+              <p className=" pr-8 ">{item.content}</p>
             </div>
             {/* bottom */}
+
             <div className="flex">
-              <div className="flex items-center justify-center gap-2">
+              <div
+                className="flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => router.push(`/${item.id}`)}
+              >
                 <BsChatLeft className="" />
                 <p>Comments</p>
               </div>

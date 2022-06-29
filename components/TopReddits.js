@@ -21,14 +21,14 @@ export default function TopReddits({
           key={index}
         >
           <p>{index + 1}</p>
-          <FiChevronUp className="shrink-0" />
+          {/* <FiChevronUp className="shrink-0" /> */}
           <BsReddit className="w-7 h-7 shrink-0" />
           <p className="truncate">r/{item}</p>
           <button
             className="ml-auto border-1 rounded-2xl pl-3 pr-3 bg-blue-400 text-white"
             onClick={() => setReddit(item)}
           >
-            Join
+            View
           </button>
         </div>
       ))}

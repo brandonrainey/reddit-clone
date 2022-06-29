@@ -47,7 +47,7 @@ export default function MakePost() {
     setUniqueId(uuidv4())
   }
 
-  console.log(reddit)
+  
 
   return (
     <div className="flex flex-col items-center">

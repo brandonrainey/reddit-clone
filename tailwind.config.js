@@ -22,6 +22,7 @@ module.exports = {
       // => @media (min-width: 1024px) { ... }
     }, borderWidth: {
       '1': '1px',
+      '2': '2px',
       'half': '0.5px'
     }
     
