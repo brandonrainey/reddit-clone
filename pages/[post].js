@@ -8,6 +8,8 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  query,
+  orderBy,
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useRouter } from 'next/router'
@@ -21,6 +23,7 @@ import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
 
 export default function Post() {
+
   const [reddit, setReddit] = useRedditContext()
 
   const router = useRouter()
@@ -35,11 +38,9 @@ export default function Post() {
 
   const [currentComments, setCurrentComments] = useState([])
 
-  
   const commentRef = collection(db, 'posts', post || 'mypost', 'comments')
- 
-const [voteComment, setVoteComment] = useState(false)
-  
+
+  const q = query(commentRef, orderBy('votes', 'desc'))
 
   const postRef = collection(db, 'stuff', reddit, 'posts')
 
@@ -56,8 +57,15 @@ const [voteComment, setVoteComment] = useState(false)
       content: commentContent,
       user: 'Genlordqt',
       votes: 0,
-      id: uniqueId
+      id: uniqueId,
     })
+
+    await setDoc(
+      doc(db, 'posts', post, 'comments', uniqueId, 'votecheck', uniqueId),
+      {
+        [session.user.name]: '',
+      }
+    )
 
     setUniqueId(uuidv4())
     setCommentContent('')
@@ -100,8 +108,6 @@ const [voteComment, setVoteComment] = useState(false)
 
     const currentUser = voteSnap.data()[current]
 
-    
-
     if (currentUser != 'downvoted') {
       await updateDoc(postRef, {
         votes: postSnap.data().votes - 1,
@@ -114,21 +120,60 @@ const [voteComment, setVoteComment] = useState(false)
   }
 
   async function upvoteComment(id) {
+    const voteRef = doc(db, 'posts', post, 'comments', id, 'votecheck', id)
+
+    const voteSnap = await getDoc(voteRef)
+
     const commentRef = doc(db, 'posts', post, 'comments', id)
 
     const commentSnap = await getDoc(commentRef)
 
-    await updateDoc(commentRef, {
-      votes: commentSnap.data().votes + 1
-    })
+    const current = session.user.name
 
+    const currentUser = voteSnap.data()[current]
 
+    if (currentUser != 'upvoted') {
+      setCurrentComments([])
+
+      await updateDoc(commentRef, {
+        votes: commentSnap.data().votes + 1,
+      })
+
+      await setDoc(voteRef, {
+        [session.user.name]: 'upvoted',
+      })
+    }
+  }
+
+  async function downvoteComment(id) {
+    const voteRef = doc(db, 'posts', post, 'comments', id, 'votecheck', id)
+
+    const voteSnap = await getDoc(voteRef)
+
+    const commentRef = doc(db, 'posts', post, 'comments', id)
+
+    const commentSnap = await getDoc(commentRef)
+
+    const current = session.user.name
+
+    const currentUser = voteSnap.data()[current]
+
+    if (currentUser != 'downvoted') {
+      setCurrentComments([])
+
+      await updateDoc(commentRef, {
+        votes: commentSnap.data().votes - 1,
+      })
+
+      await setDoc(voteRef, {
+        [session.user.name]: 'downvoted',
+      })
+    }
   }
 
   useEffect(() => {
-    setCurrentComments([])
-    
-    onSnapshot(commentRef, (snapshot) => {
+    onSnapshot(q, (snapshot) => {
+      setCurrentComments([])
       snapshot.docs.forEach((doc) => {
         setCurrentComments((currentComments) => [
           ...currentComments,
@@ -136,7 +181,7 @@ const [voteComment, setVoteComment] = useState(false)
         ])
       })
     })
-    console.log('triggerd')
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post, uniqueId])
 
@@ -154,7 +199,7 @@ const [voteComment, setVoteComment] = useState(false)
     <div className="flex flex-col items-center">
       <Header />
       <Banner reddit={reddit} />
-      <div className="flex border-2 w-1/2 h-auto pt-2">
+      <div className="flex border-l-2 border-r-2 w-1/2 h-auto pt-2">
         <div className="flex flex-col items-center w-10">
           <TbArrowBigTop
             className="w-6 h-6 cursor-pointer"
@@ -167,13 +212,16 @@ const [voteComment, setVoteComment] = useState(false)
             }}
           />
           <p>{currentPost?.votes}</p>
-          <TbArrowBigDown className="w-6 h-6 cursor-pointer" onClick={() => {
+          <TbArrowBigDown
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => {
               if (session != undefined) {
                 downvotePost()
               } else {
                 alert('You Must Be Signed In')
               }
-            }}/>
+            }}
+          />
         </div>
         <div className="flex flex-col w-full">
           <div className="flex flex-col">
@@ -216,15 +264,20 @@ const [voteComment, setVoteComment] = useState(false)
             </div>
             <div className="indent-6 pb-2">{item?.content}</div>
             <div className="flex gap-1 ml-4 items-center">
-              <button onClick={() => {
-                upvoteComment(item.id)
-                setVoteComment(!voteComment)
-              }}>
+              <button
+                onClick={() => {
+                  upvoteComment(item.id)
+                }}
+              >
                 <TbArrowBigTop className="w-5 h-5 cursor-pointer" />
               </button>
 
-              <p className="font-medium">{item.votes != 0 ? item.votes : 'vote'}</p>
-              <TbArrowBigDown className="w-5 h-5" />
+              <p className="font-medium">
+                {item.votes != 0 ? item.votes : 'vote'}
+              </p>
+              <button onClick={() => downvoteComment(item.id)}>
+                <TbArrowBigDown className="w-5 h-5" />
+              </button>
             </div>
           </div>
         ))}

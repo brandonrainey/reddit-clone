@@ -14,7 +14,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-export default function Posts({ posts, setPosts, reddit }) {
+export default function Posts({ posts, setPosts, reddit, timeString}) {
   const router = useRouter()
 
   const [pressedUp, setPressedUp] = useState(false)
@@ -30,6 +30,13 @@ export default function Posts({ posts, setPosts, reddit }) {
   const colRef = collection(db, 'posts')
 
   const { data: session } = useSession()
+
+  
+
+
+  
+
+  
 
   async function upvotePost() {
     const docRef = doc(db, 'stuff', reddit, 'posts', postId)
@@ -110,6 +117,8 @@ export default function Posts({ posts, setPosts, reddit }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId])
 
+
+  
   
 
   return (
@@ -146,8 +155,9 @@ export default function Posts({ posts, setPosts, reddit }) {
             {/* reddit */}
             <div className="flex flex-wrap items-center pt-1">
               <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
-              <p className="text-sm text-slate-500">
-                Posted by u/{item.user} 5 hours ago
+              
+              <p className="text-sm text-slate-500" >
+                Posted by u/{item.user} {item.timeDifference} {timeString} ago
               </p>
             </div>
             {/* title */}

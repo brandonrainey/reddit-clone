@@ -48,7 +48,7 @@ export default function Header({ reddit }) {
   }, [open])
 
   return (
-    <div className="flex border-b h-14 pt-2 pb-2 w-full ">
+    <div className="flex border-b h-14 pt-2 pb-2 w-full  bg-white">
       <Link href="/">
         <div className="flex w-14 h-full pl-2 pr-2 cursor-pointer items-center">
           <Image

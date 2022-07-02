@@ -25,7 +25,7 @@ export default function TopReddits({
           <BsReddit className="w-7 h-7 shrink-0" />
           <p className="truncate">r/{item}</p>
           <button
-            className="ml-auto border-1 rounded-2xl pl-3 pr-3 bg-blue-400 text-white"
+            className="ml-auto border-1 rounded-2xl pl-3 pr-3 bg-blue-400 text-white font-medium"
             onClick={() => setReddit(item)}
           >
             View
@@ -35,7 +35,7 @@ export default function TopReddits({
 
       <div className="flex justify-center pt-3">
         <button
-          className="bg-blue-400 text-white w-44 p-2 rounded-3xl text-base"
+          className="bg-blue-400 text-white w-44 p-2 rounded-3xl text-base font-medium"
           onClick={() => setOpenCreate(!openCreate)}
         >
           Create a Community
