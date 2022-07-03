@@ -76,12 +76,14 @@ export default function Header({ reddit }) {
       </Link>
 
       {/* home */}
-      <div className="flex items-center w-14 sm:w-56 hover:outline hover:outline-1 hover:outline-black mr-4 rounded-sm cursor-pointer relative" onClick={() => setHomeMenu(!homeMenu)}>
+      <div
+        className="flex items-center w-14 sm:w-56 hover:outline hover:outline-1 hover:outline-black mr-4 rounded-sm cursor-pointer relative"
+        onClick={() => setHomeMenu(!homeMenu)}
+      >
+        {homeMenu ? (
+          <div className="absolute w-56 h-64 border-1 top-10 bg-white"></div>
+        ) : null}
 
-        {homeMenu ? (<div className='absolute w-56 h-64 border-1 top-10 bg-white'>
-
-        </div>) : null}
-        
         <div className="flex items-center gap-x-1 ml-1">
           <AiFillHome />
           <p className="sm:flex hidden ">{`${
@@ -99,7 +101,7 @@ export default function Header({ reddit }) {
         </div>
 
         <input
-          className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0"
+          className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0 rounded-none"
           placeholder="Search Reddit"
         />
       </form>
@@ -115,7 +117,7 @@ export default function Header({ reddit }) {
           <BsChatDots className="w-5 h-5 cursor-pointer" />
           <FiBell className="w-5 h-5 cursor-pointer" />
           <AiOutlinePlus className="w-5 h-5 cursor-pointer" />
-          <BsMegaphone className="w-7 h-7 bg-gray-200 rounded-full p-1 cursor-pointer" />
+          <BsMegaphone className={`w-7 h-7 bg-gray-200 rounded-full p-1 cursor-pointer ${session ? 'hidden' : null}`} />
         </div>
       </div>
 
@@ -127,10 +129,12 @@ export default function Header({ reddit }) {
         ref={userMenu}
       >
         <IoLogoReddit className="w-6 h-full hidden sm:inline" />
-        <div className={`${session ? 'flex' : 'hidden'} flex-col`}>
+
+        {session ? (<div className={`flex flex-col `}>
           <p className="truncate text-xs">{session?.user?.name}</p>
           {session ? <p className="text-xs text-gray-400">1 Karma</p> : null}
-        </div>
+        </div>) : null}
+        
 
         <FiChevronDown />
       </div>

@@ -199,7 +199,7 @@ export default function Post() {
     <div className="flex flex-col items-center">
       <Header />
       <Banner reddit={reddit} />
-      <div className="flex border-l-2 border-r-2 w-1/2 h-auto pt-2">
+      <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2">
         <div className="flex flex-col items-center w-10">
           <TbArrowBigTop
             className="w-6 h-6 cursor-pointer"
@@ -255,7 +255,7 @@ export default function Post() {
           </form>
         </div>
       </div>
-      <div className="border-2 w-1/2 h-auto mb-4">
+      <div className="border-2 w-full sm:w-1/2 h-auto mb-4">
         {currentComments.map((item, index) => (
           <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1" key={index}>
             <div className="flex pb-2 gap-2 text-sm font-medium">
