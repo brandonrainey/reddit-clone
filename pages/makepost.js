@@ -79,11 +79,11 @@ export default function MakePost() {
         </div>
         {redditMenuOpen ? (
           <div className="bg-white w-52 absolute top-28 shadow border-x-1 border-b-1 h-auto" >
-            {redditList.map((item) => (
+            {redditList.map((item, index) => (
               <p className='pb-1 pl-2 hover:bg-blue-100 cursor-pointer' onClick={() => {
                 setPostReddit(item)
                 setRedditMenuOpen(false)
-              }}>r/{item}</p>
+              }} key={index}>r/{item}</p>
             ))}
           </div>
         ) : null}

@@ -257,7 +257,7 @@ export default function Post() {
       </div>
       <div className="border-2 w-1/2 h-auto mb-4">
         {currentComments.map((item, index) => (
-          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1">
+          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1" key={index}>
             <div className="flex pb-2 gap-2 text-sm font-medium">
               <BsReddit className="h-6 w-6" />
               {item?.user}
