@@ -12,8 +12,10 @@ export default function TopReddits({
   const [reddit, setReddit] = useRedditContext()
 
   return (
-    <div className="hidden w-60 border-1 border-gray-300 h-96 ml-12 custom:flex flex-col rounded ">
-      <div className="h-20 border-1 w-full flex items-end pb-2 pl-2 font-semibold text-lg">Top Communities</div>
+    <div className="hidden w-60 border-1 border-gray-300 h-1/2 ml-12 custom:flex flex-col rounded ">
+      <div className="h-20 border-1 w-full flex items-end pb-2 pl-2 font-semibold text-lg">
+        Top Communities
+      </div>
 
       {communities.map((item, index) => (
         <div
@@ -33,7 +35,7 @@ export default function TopReddits({
         </div>
       ))}
 
-      <div className="flex justify-center pt-3">
+      <div className="flex justify-center mt-7">
         <button
           className="bg-blue-400 text-white w-44 p-2 rounded-3xl text-base font-medium"
           onClick={() => setOpenCreate(!openCreate)}

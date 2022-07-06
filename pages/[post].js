@@ -23,7 +23,6 @@ import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
 
 export default function Post() {
-
   const [reddit, setReddit] = useRedditContext()
 
   const router = useRouter()

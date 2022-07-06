@@ -8,13 +8,16 @@ import {
   getDoc,
   updateDoc,
   doc,
+  setDoc,
+  onSnapshot,
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { IconContext } from 'react-icons'
 
-export default function Posts({ posts, setPosts, reddit, timeString}) {
+export default function Posts({ posts, setPosts, reddit, timeString }) {
   const router = useRouter()
 
   const [pressedUp, setPressedUp] = useState(false)
@@ -31,25 +34,24 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
 
   const { data: session } = useSession()
 
-  
+  const [allPosts, setAllPosts] = useState([])
 
+  const [voteColor, setVoteColor] = useState([])
 
-  
-
-  
+  const currentUser = session?.user?.name
 
   async function upvotePost() {
+    const current = session.user.name
+
     const docRef = doc(db, 'stuff', reddit, 'posts', postId)
 
     const votedRef = doc(db, 'posts', postId)
 
+    const votedRef2 = doc(db, 'posts', postId, current, 'voteData')
+
     const voteSnap = await getDoc(votedRef)
 
-    const current = session.user.name
-
     const currentUser = voteSnap.data()[current]
-
-    
 
     if (currentUser != 'upvoted') {
       await updateDoc(docRef, {
@@ -59,6 +61,11 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
       await updateDoc(votedRef, {
         [session.user.name]: 'upvoted',
       })
+
+      await setDoc(votedRef2, {
+        vote: 'upvoted',
+        color: 'orange',
+      })
     }
 
     setPostId('')
@@ -66,17 +73,17 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
   }
 
   async function downvotePost() {
+    const current = session.user.name
+
     const docRef = doc(db, 'stuff', reddit, 'posts', postId)
 
     const votedRef = doc(db, 'posts', postId)
 
+    const votedRef2 = doc(db, 'posts', postId, current, 'voteData')
+
     const voteSnap = await getDoc(votedRef)
 
-    const current = session.user.name
-
     const currentUser = voteSnap.data()[current]
-
-    
 
     if (currentUser != 'downvoted') {
       await updateDoc(docRef, {
@@ -85,6 +92,11 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
 
       await updateDoc(votedRef, {
         [session.user.name]: 'downvoted',
+      })
+
+      await setDoc(votedRef2, {
+        vote: 'downvoted',
+        color: 'blue',
       })
     }
 
@@ -117,9 +129,36 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId])
 
+  // collects ids of all posts
+  useEffect(() => {
+    const colorRef = collection(db, 'posts')
 
-  
-  
+    onSnapshot(colorRef, (snapshot) => {
+      setAllPosts([])
+      snapshot.docs.forEach((doc) => {
+        setAllPosts((allPosts) => [...allPosts, doc.id])
+      })
+    })
+  }, [])
+
+  // maps through all post ids, making a ref for each to snapshot the votedata for each post into state
+  useEffect(() => {
+    setVoteColor([])
+    posts.map((item) => {
+      allPosts.map((item2) => {
+        if (item.id == item2) {
+          const rref = collection(db, 'posts', item2, currentUser)
+
+          onSnapshot(rref, (snapshot) => {
+            console.log('triggered')
+            snapshot.docs.forEach((doc) => {
+              setVoteColor((voteColor) => [...voteColor, doc.data()])
+            })
+          })
+        }
+      })
+    })
+  }, [reddit, posts, postIndex])
 
   return (
     <div className="flex  mt-4 flex-col ">
@@ -129,34 +168,57 @@ export default function Posts({ posts, setPosts, reddit, timeString}) {
           key={index}
         >
           <div className="flex flex-col items-center bg-gray-50 w-10 self-center">
-            <button
-              onClick={() => {
-                setPostNumber(index)
-                setPostIndex(item.id)
-                setPressedUp(true)
+            <IconContext.Provider
+              value={{
+                color: `${
+                  voteColor[index]?.vote == 'upvoted' ? voteColor[index]?.color : ''
+                }`,
               }}
             >
-              <TbArrowBigTop className="w-6 h-6" />
-            </button>
+              <button
+                onClick={() => {
+                  setPostNumber(index)
+                  setPostIndex(item.id)
+                  setPressedUp(true)
+                }}
+              >
+                <TbArrowBigTop className={`w-6 h-6 ${
+                  voteColor[index]?.vote == 'upvoted' ? 'bg-orange-200' : ''
+                } rounded`} />
+              </button>
+            </IconContext.Provider>
 
             <p>{item.votes}</p>
-            <button
-              onClick={() => {
-                setPostNumber(index)
-                setPostIndex(item.id)
-                setPressedDown(true)
+
+            <IconContext.Provider
+              value={{
+                color: `${
+                  voteColor[index]?.vote == 'downvoted'
+                    ? voteColor[index]?.color
+                    : ''
+                }`,
               }}
             >
-              <TbArrowBigDown className="w-6 h-6" />
-            </button>
+              <button
+                onClick={() => {
+                  setPostNumber(index)
+                  setPostIndex(item.id)
+                  setPressedDown(true)
+                }}
+              >
+                <TbArrowBigDown className={`w-6 h-6 ${
+                  voteColor[index]?.vote == 'downvoted' ? 'bg-blue-200' : ''
+                } rounded`} />
+              </button>
+            </IconContext.Provider>
           </div>
           {/* post */}
           <div className="flex flex-col w-full pl-2">
             {/* reddit */}
             <div className="flex flex-wrap items-center pt-1">
               <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
-              
-              <p className="text-sm text-slate-500" >
+
+              <p className="text-sm text-slate-500">
                 Posted by u/{item.user} {item.timeDifference} {timeString} ago
               </p>
             </div>

@@ -13,9 +13,13 @@ import { BiVideoRecording } from 'react-icons/bi'
 import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useRedditContext } from '../components/context/reddit'
+import { FaRedditSquare } from 'react-icons/fa'
 
-export default function Header({ reddit }) {
+export default function Header({ communities }) {
   const { data: session } = useSession()
+
+  const [reddit, setReddit] = useRedditContext()
 
   const [open, setOpen] = useState(null)
 
@@ -23,7 +27,11 @@ export default function Header({ reddit }) {
 
   const openMenu = useRef()
 
-  const [homeMenu, setHomeMenu] = useState()
+  const homeList = useRef()
+
+  const homeButton = useRef()
+
+  const [homeMenu, setHomeMenu] = useState(null)
 
   const closeOpenMenus = (e) => {
     if (
@@ -33,6 +41,15 @@ export default function Header({ reddit }) {
       !openMenu.current.contains(e.target)
     ) {
       setOpen(false)
+    }
+
+    if (
+      homeButton.current &&
+      homeMenu &&
+      !homeButton.current.contains(e.target) &&
+      !homeList.current.contains(e.target)
+    ) {
+      setHomeMenu(false)
     }
   }
 
@@ -45,7 +62,7 @@ export default function Header({ reddit }) {
       document.removeEventListener('mousedown', closeOpenMenus)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
+  }, [open, homeMenu])
 
   return (
     <div className="flex border-b h-14 pt-2 pb-2 w-full  bg-white">
@@ -79,14 +96,36 @@ export default function Header({ reddit }) {
       <div
         className="flex items-center w-14 sm:w-56 hover:outline hover:outline-1 hover:outline-black mr-4 rounded-sm cursor-pointer relative"
         onClick={() => setHomeMenu(!homeMenu)}
+        ref={homeButton}
       >
         {homeMenu ? (
-          <div className="absolute w-56 h-64 border-1 top-10 bg-white"></div>
+          <div
+            className="absolute w-56 h-64 border-1 top-10 bg-white  flex flex-col rounded"
+            ref={homeList}
+          >
+            <p className="pb-4 text-gray-700 font-semibold pl-2 pt-2">
+              Communites
+            </p>
+            <div className="flex flex-col w-full">
+              {communities.map((item, index) => (
+                <div
+                  className="hover:bg-blue-100 py-1 pl-4 tracking-wide "
+                  onClick={() => {
+                    setReddit(item)
+                    setHomeMenu(false)
+                  }}
+                  key={index}
+                >
+                  r/{item}
+                </div>
+              ))}
+            </div>
+          </div>
         ) : null}
 
         <div className="flex items-center gap-x-1 ml-1">
           <AiFillHome />
-          <p className="sm:flex hidden ">{`${
+          <p className="sm:flex hidden font-medium">{`${
             reddit ? `r/${reddit}` : 'Home'
           }`}</p>
         </div>
@@ -117,7 +156,11 @@ export default function Header({ reddit }) {
           <BsChatDots className="w-5 h-5 cursor-pointer" />
           <FiBell className="w-5 h-5 cursor-pointer" />
           <AiOutlinePlus className="w-5 h-5 cursor-pointer" />
-          <BsMegaphone className={`w-7 h-7 bg-gray-200 rounded-full p-1 cursor-pointer ${session ? 'hidden' : null}`} />
+          <BsMegaphone
+            className={`w-7 h-7 bg-gray-200 rounded-full p-1 cursor-pointer ${
+              session ? 'hidden' : null
+            }`}
+          />
         </div>
       </div>
 
@@ -130,17 +173,18 @@ export default function Header({ reddit }) {
       >
         <IoLogoReddit className="w-6 h-full hidden sm:inline" />
 
-        {session ? (<div className={`flex flex-col `}>
-          <p className="truncate text-xs">{session?.user?.name}</p>
-          {session ? <p className="text-xs text-gray-400">1 Karma</p> : null}
-        </div>) : null}
-        
+        {session ? (
+          <div className={`flex flex-col `}>
+            <p className="truncate text-xs">{session?.user?.name}</p>
+            {session ? <p className="text-xs text-gray-400">1 Karma</p> : null}
+          </div>
+        ) : null}
 
         <FiChevronDown />
       </div>
       {open ? (
         <div
-          className="flex absolute border-1 rounded bg-white right-2 top-14 w-48 h-60 shadow justify-center"
+          className="flex absolute border-1 rounded bg-white right-2 top-14 w-48 h-60 shadow justify-center z-20"
           ref={openMenu}
         >
           {session ? (

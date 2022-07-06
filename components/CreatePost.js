@@ -12,20 +12,21 @@ export default function CreatePost() {
     <div className="flex items-center w-full border-1 border-gray-300 h-12 gap-3 p-2 rounded ">
       <FaRegUserCircle className="h-7 w-7 cursor-pointer shrink-0" />
 
-      {session ? (<Link href={`/makepost`}>
-        <button className="border-1 border-gray-300 w-full h-8 rounded bg-blue-50 text-left pl-4 text-gray-400 hover:border-blue-500">
+      {session ? (
+        <Link href={`/makepost`}>
+          <button className="border-1 border-gray-300 w-full h-8 rounded bg-blue-50 text-left pl-4 text-gray-400 hover:border-blue-500">
+            Create Post
+          </button>
+        </Link>
+      ) : (
+        <button
+          className="border-1 border-gray-300 w-full h-8 rounded bg-blue-50 text-left pl-4 text-gray-400 hover:border-blue-500"
+          onClick={() => signIn()}
+        >
           Create Post
         </button>
-      </Link>) : (<button className="border-1 border-gray-300 w-full h-8 rounded bg-blue-50 text-left pl-4 text-gray-400 hover:border-blue-500" onClick={() => signIn()}>
-          Create Post
-        </button>)}
+      )}
 
-      
-
-
-
-
-      
       <FiImage className="h-7 w-7 cursor-pointer shrink-0" />
       <FiLink className="h-7 w-7 cursor-pointer shrink-0" />
     </div>

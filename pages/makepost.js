@@ -51,7 +51,7 @@ export default function MakePost() {
       user: session?.user?.name,
       votes: 0,
       date: postDate,
-      timeDifference: ''
+      timeDifference: '',
     })
 
     setDoc(doc(db, 'posts', uniqueId), {})
@@ -73,17 +73,26 @@ export default function MakePost() {
     <div className="flex flex-col items-center bg-blue-100">
       <Header />
       <div className="flex w-11/12 max-w-3xl h-screen mt-6 flex-col ">
-        <div className=" flex items-center relative border-1 w-52 bg-white p-1 text-left mb-2 shadow font-medium text-gray-700 cursor-pointer " onClick={() => setRedditMenuOpen(!redditMenuOpen)}>
+        <div
+          className=" flex items-center relative border-1 w-52 bg-white p-1 text-left mb-2 shadow font-medium text-gray-700 cursor-pointer "
+          onClick={() => setRedditMenuOpen(!redditMenuOpen)}
+        >
           <p>{postReddit ? `r/${postReddit}` : 'Choose Reddit'}</p>
-          <FiChevronDown className='ml-auto'/>
+          <FiChevronDown className="ml-auto" />
         </div>
         {redditMenuOpen ? (
-          <div className="bg-white w-52 absolute top-28 shadow border-x-1 border-b-1 h-auto" >
+          <div className="bg-white w-52 absolute top-28 shadow border-x-1 border-b-1 h-auto">
             {redditList.map((item, index) => (
-              <p className='pb-1 pl-2 hover:bg-blue-100 cursor-pointer' onClick={() => {
-                setPostReddit(item)
-                setRedditMenuOpen(false)
-              }} key={index}>r/{item}</p>
+              <p
+                className="pb-1 pl-2 hover:bg-blue-100 cursor-pointer"
+                onClick={() => {
+                  setPostReddit(item)
+                  setRedditMenuOpen(false)
+                }}
+                key={index}
+              >
+                r/{item}
+              </p>
             ))}
           </div>
         ) : null}
@@ -111,9 +120,6 @@ export default function MakePost() {
               Post
             </button>
           </form>
-
-
-          
         </div>
       </div>
     </div>

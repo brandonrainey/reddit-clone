@@ -13,7 +13,7 @@ import {
   orderBy,
   query,
   updateDoc,
-  doc
+  doc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
@@ -23,13 +23,9 @@ import Banner from '../components/Banner'
 export default function Home() {
   const [reddit, setReddit] = useRedditContext()
 
-  
-
   const [timeDifference, setTimeDifference] = useState()
 
   const [timeString, setTimeString] = useState()
-  
-  
 
   const [communities, setCommunities] = useState([])
 
@@ -48,41 +44,38 @@ export default function Home() {
   const date2 = Date.now()
 
   function getDifferenceInDays(date1, date2) {
-    const diffInMs = Math.abs(date2 - date1);
-    return diffInMs / (1000 * 60 * 60 * 24);
+    const diffInMs = Math.abs(date2 - date1)
+    return diffInMs / (1000 * 60 * 60 * 24)
   }
 
   function getDifferenceinHours(date1, date2) {
-    const diffInMs = Math.abs(date2 - date1);
-    return diffInMs / (1000 * 60 * 60);
+    const diffInMs = Math.abs(date2 - date1)
+    return diffInMs / (1000 * 60 * 60)
   }
 
   function getDifferenceInMinutes(date1, date2) {
-    const diffInMs = Math.abs(date2 - date1);
-    return diffInMs / (1000 * 60);
+    const diffInMs = Math.abs(date2 - date1)
+    return diffInMs / (1000 * 60)
   }
 
   function calculateTime(date1, date2) {
     const minutes = Math.round(getDifferenceInMinutes(date1, date2))
-    
+
     setTimeDifference(minutes)
     setTimeString('minutes')
     if (minutes > 60) {
       const hours = Math.round(getDifferenceinHours(date1, date2))
-      setTimeDifference(hours) 
-     setTimeString('hours')
+      setTimeDifference(hours)
+      setTimeString('hours')
       if (hours > 24) {
         const days = Math.round(getDifferenceInDays(date1, date2))
         setTimeDifference(days)
         setTimeString('days')
       }
-      
     }
-    
+
     return timeDifference
-    
   }
-  
 
   const q = query(postRef, orderBy('votes', 'desc'))
 
@@ -106,37 +99,31 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  
   useEffect(() => {
-
-    
-    
     posts.forEach((item) => {
-
       const data = calculateTime(item.date, date2)
-      
-      
-       const myRef = doc(db, 'stuff', reddit, 'posts', item.id )
-        if (data != undefined) {
-          updateDoc(myRef, {
-        timeDifference: data
-       })
-        }
-       
-    })
-    
-      
-    
-  }, [posts])
-  
 
-  
+      const myRef = doc(db, 'stuff', reddit, 'posts', item.id)
+      if (data != undefined) {
+        updateDoc(myRef, {
+          timeDifference: data,
+        })
+      }
+    })
+  }, [posts])
 
   return (
     <div className="flex flex-col items-center ">
-      <Header />
-      {openCreate ? <CreateReddit openCreate={openCreate} setOpenCreate={setOpenCreate} reddit={reddit} setReddit={setReddit}/> : null}
-      <Banner reddit={reddit}/>
+      <Header communities={communities} />
+      {openCreate ? (
+        <CreateReddit
+          openCreate={openCreate}
+          setOpenCreate={setOpenCreate}
+          reddit={reddit}
+          setReddit={setReddit}
+        />
+      ) : null}
+      <Banner reddit={reddit} />
       <div className="flex w-full  h-screen mt-6 justify-center ">
         <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
           <CreatePost />
@@ -149,10 +136,14 @@ export default function Home() {
             timeString={timeString}
           />
         </div>
-        
-        <TopReddits openCreate={openCreate} setOpenCreate={setOpenCreate} communities={communities} setCommunities={setCommunities}/>
-      </div>
 
+        <TopReddits
+          openCreate={openCreate}
+          setOpenCreate={setOpenCreate}
+          communities={communities}
+          setCommunities={setCommunities}
+        />
+      </div>
     </div>
   )
 }
