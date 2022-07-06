@@ -14,9 +14,9 @@ import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRedditContext } from '../components/context/reddit'
-import { FaRedditSquare } from 'react-icons/fa'
 
-export default function Header({ communities }) {
+
+export default function Header({ communities, openCreate, setOpenCreate }) {
   const { data: session } = useSession()
 
   const [reddit, setReddit] = useRedditContext()
@@ -100,13 +100,17 @@ export default function Header({ communities }) {
       >
         {homeMenu ? (
           <div
-            className="absolute w-56 h-64 border-1 top-10 bg-white  flex flex-col rounded"
+            className="absolute w-56 h-auto border-1 top-10 bg-white  flex flex-col rounded"
             ref={homeList}
           >
             <p className="pb-4 text-gray-700 font-semibold pl-2 pt-2">
               Communites
             </p>
             <div className="flex flex-col w-full">
+              <div className='flex gap-2 pl-2 py-1 mb-1 hover:bg-blue-100' onClick={() => setOpenCreate(true)}>
+                <AiOutlinePlus className='h-6 w-6'/>
+                <p>Create a Community</p>
+              </div>
               {communities.map((item, index) => (
                 <div
                   className="hover:bg-blue-100 py-1 pl-4 tracking-wide "

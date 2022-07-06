@@ -114,7 +114,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center ">
-      <Header communities={communities} />
+      <Header communities={communities} openCreate={openCreate}
+          setOpenCreate={setOpenCreate}/>
       {openCreate ? (
         <CreateReddit
           openCreate={openCreate}
