@@ -22,7 +22,7 @@ export default function CreateReddit({ openCreate, setOpenCreate }) {
   return (
     <div className="flex w-full absolute bg-black/50  h-full justify-center items-center ">
       <form
-        className="w-1/3 h-1/3 bg-white flex flex-col p-4 rounded"
+        className=" w-11/12 sm:w-1/3  h-1/3 bg-white flex flex-col p-4 rounded"
         onSubmit={createCommunity}
       >
         <div className="flex flex-col gap-2">
