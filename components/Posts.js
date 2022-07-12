@@ -38,7 +38,7 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
 
   const [voteColor, setVoteColor] = useState([])
 
-  const currentUser = session?.user?.name
+  
 
   async function upvotePost() {
     const current = session.user.name
@@ -143,6 +143,8 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
 
   // maps through all post ids, making a ref for each to snapshot the votedata for each post into state
   useEffect(() => {
+
+    const currentUser = session?.user?.name
     setVoteColor([])
     posts.map((item) => {
       allPosts.map((item2) => {
@@ -150,7 +152,7 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
           const rref = collection(db, 'posts', item2, currentUser)
 
           onSnapshot(rref, (snapshot) => {
-            console.log('triggered')
+            
             snapshot.docs.forEach((doc) => {
               setVoteColor((voteColor) => [...voteColor, doc.data()])
             })
