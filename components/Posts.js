@@ -146,7 +146,9 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
 
     const currentUser = session?.user?.name
     setVoteColor([])
-    posts.map((item) => {
+
+    if (currentUser) {
+      posts.map((item) => {
       allPosts.map((item2) => {
         if (item.id == item2) {
           const rref = collection(db, 'posts', item2, currentUser)
@@ -160,6 +162,8 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
         }
       })
     })
+    }
+    
   }, [reddit, posts, postIndex])
 
   return (
