@@ -183,7 +183,7 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
                 }}
               >
                 <TbArrowBigTop className={`w-6 h-6 ${
-                  voteColor[index]?.vote == 'upvoted' ? 'bg-orange-200' : ''
+                  voteColor[index]?.vote == 'upvoted' ? 'bg-orange-100' : ''
                 } rounded`} />
               </button>
             </IconContext.Provider>
@@ -207,13 +207,13 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
                 }}
               >
                 <TbArrowBigDown className={`w-6 h-6 ${
-                  voteColor[index]?.vote == 'downvoted' ? 'bg-blue-200' : ''
+                  voteColor[index]?.vote == 'downvoted' ? 'bg-blue-100' : ''
                 } rounded`} />
               </button>
             </IconContext.Provider>
           </div>
           {/* post */}
-          <div className="flex flex-col w-full pl-2">
+          <div className="flex flex-col w-full pl-2 cursor-pointer" onClick={() => router.push(`/${item.id}`)}>
             {/* reddit */}
             <div className="flex flex-wrap items-center pt-1">
               <p className="mr-2 font-semibold text-sm">r/{reddit}</p>

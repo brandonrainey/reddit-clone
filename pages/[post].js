@@ -21,6 +21,7 @@ import { BsChatLeft } from 'react-icons/bs'
 import { useSession, signIn } from 'next-auth/react'
 import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
+import { IconContext } from 'react-icons'
 
 export default function Post() {
   const [reddit, setReddit] = useRedditContext()
@@ -43,6 +44,38 @@ export default function Post() {
 
   const postRef = collection(db, 'stuff', reddit, 'posts')
 
+  const currentUser = session?.user?.name
+
+  const [color, setColor] = useState()
+
+  const [commentColor, setCommentColor] = useState([])
+
+  const [trigger, setTrigger] = useState(false)
+
+  async function colorSnap() {
+    const colorRef = doc(db, 'posts', post, currentUser, 'voteData')
+    const result = await getDoc(colorRef)
+    setColor(result.data())
+  }
+
+  async function commentColorSnap(id) {
+    setCommentColor([])
+
+    currentComments.map(async (item) => {
+      const colorRef = doc(
+        db,
+        'posts',
+        post,
+        'comments',
+        item.id,
+        currentUser,
+        'voteData'
+      )
+      const result = await getDoc(colorRef)
+      setCommentColor((commentColor) => [...commentColor, result.data()])
+    })
+  }
+
   const [commentContent, setCommentContent] = useState('')
 
   function handleCommentChange(e) {
@@ -60,9 +93,18 @@ export default function Post() {
     })
 
     await setDoc(
-      doc(db, 'posts', post, 'comments', uniqueId, 'votecheck', uniqueId),
+      doc(
+        db,
+        'posts',
+        post,
+        'comments',
+        uniqueId,
+        session.user.name,
+        'voteData'
+      ),
       {
-        [session.user.name]: '',
+        voted: '',
+        color: '',
       }
     )
 
@@ -71,15 +113,16 @@ export default function Post() {
   }
 
   async function upvotePost() {
+    const current = session.user.name
     const postRef = doc(db, 'stuff', reddit, 'posts', post)
 
     const postSnap = await getDoc(postRef)
 
     const votedRef = doc(db, 'posts', post)
 
-    const voteSnap = await getDoc(votedRef)
+    const votedRef2 = doc(db, 'posts', post, current, 'voteData')
 
-    const current = session.user.name
+    const voteSnap = await getDoc(votedRef)
 
     const currentUser = voteSnap.data()[current]
 
@@ -91,19 +134,28 @@ export default function Post() {
       await updateDoc(votedRef, {
         [session.user.name]: 'upvoted',
       })
+
+      await setDoc(votedRef2, {
+        vote: 'upvoted',
+        color: 'orange',
+      })
     }
+
+    colorSnap()
   }
 
   async function downvotePost() {
+    const current = session.user.name
+
     const postRef = doc(db, 'stuff', reddit, 'posts', post)
 
     const postSnap = await getDoc(postRef)
 
     const votedRef = doc(db, 'posts', post)
 
-    const voteSnap = await getDoc(votedRef)
+    const votedRef2 = doc(db, 'posts', post, current, 'voteData')
 
-    const current = session.user.name
+    const voteSnap = await getDoc(votedRef)
 
     const currentUser = voteSnap.data()[current]
 
@@ -115,11 +167,20 @@ export default function Post() {
       await updateDoc(votedRef, {
         [session.user.name]: 'downvoted',
       })
+
+      await setDoc(votedRef2, {
+        vote: 'downvoted',
+        color: 'blue',
+      })
+
+      colorSnap()
     }
   }
 
   async function upvoteComment(id) {
-    const voteRef = doc(db, 'posts', post, 'comments', id, 'votecheck', id)
+    const current = session.user.name
+
+    const voteRef = doc(db, 'posts', post, 'comments', id, current, 'voteData')
 
     const voteSnap = await getDoc(voteRef)
 
@@ -127,25 +188,46 @@ export default function Post() {
 
     const commentSnap = await getDoc(commentRef)
 
-    const current = session.user.name
-
-    const currentUser = voteSnap.data()[current]
+    const currentUser = voteSnap.data().voted
 
     if (currentUser != 'upvoted') {
       setCurrentComments([])
 
       await updateDoc(commentRef, {
-        votes: commentSnap.data().votes + 1,
+        votes:
+          commentSnap.data().votes == -1 ? 1 : commentSnap.data().votes + 1,
       })
 
       await setDoc(voteRef, {
-        [session.user.name]: 'upvoted',
+        voted: 'upvoted',
+        color: 'orange',
       })
+
+      console.log('upvote trig')
+      setTrigger(!trigger)
     }
+
+    // if (currentUser == 'upvoted') {
+    //   if (commentSnap.data().votes == 1) {
+    //     await updateDoc(commentRef, {
+    //       votes: 0,
+    //     })
+
+    //     await setDoc(voteRef, {
+    //       voted: '',
+    //       color: '',
+    //     })
+    //   } else {
+    //     downvoteComment(id)
+    //   }
+
+    // }
   }
 
   async function downvoteComment(id) {
-    const voteRef = doc(db, 'posts', post, 'comments', id, 'votecheck', id)
+    const current = session.user.name
+
+    const voteRef = doc(db, 'posts', post, 'comments', id, current, 'voteData')
 
     const voteSnap = await getDoc(voteRef)
 
@@ -153,20 +235,22 @@ export default function Post() {
 
     const commentSnap = await getDoc(commentRef)
 
-    const current = session.user.name
-
-    const currentUser = voteSnap.data()[current]
+    const currentUser = voteSnap.data().voted
 
     if (currentUser != 'downvoted') {
       setCurrentComments([])
 
       await updateDoc(commentRef, {
-        votes: commentSnap.data().votes - 1,
+        votes:
+          commentSnap.data().votes == 1 ? -1 : commentSnap.data().votes - 1,
       })
 
       await setDoc(voteRef, {
-        [session.user.name]: 'downvoted',
+        voted: 'downvoted',
+        color: 'blue',
       })
+      console.log('downvote trig')
+      setTrigger(!trigger)
     }
   }
 
@@ -194,33 +278,55 @@ export default function Post() {
     })
   }, [post])
 
+  //trying to fix comment colors, problem- all comments change on one click, problem- comments dont show color on load
+  useEffect(() => {
+    colorSnap()
+
+    setCommentColor([])
+    commentColorSnap()
+  }, [currentComments, trigger])
+
   return (
     <div className="flex flex-col items-center">
       <Header />
       <Banner reddit={reddit} />
       <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2">
         <div className="flex flex-col items-center w-10">
-          <TbArrowBigTop
-            className="w-6 h-6 cursor-pointer"
-            onClick={() => {
-              if (session != undefined) {
-                upvotePost()
-              } else {
-                alert('You Must Be Signed In')
-              }
-            }}
-          />
+          <IconContext.Provider
+            value={{ color: `${color?.color == 'orange' ? color?.color : ''}` }}
+          >
+            <TbArrowBigTop
+              className={`w-6 h-6 cursor-pointer rounded ${
+                color?.color == 'orange' ? 'bg-orange-100' : ''
+              }`}
+              onClick={() => {
+                if (session != undefined) {
+                  upvotePost()
+                } else {
+                  alert('You Must Be Signed In')
+                }
+              }}
+            />
+          </IconContext.Provider>
+
           <p>{currentPost?.votes}</p>
-          <TbArrowBigDown
-            className="w-6 h-6 cursor-pointer"
-            onClick={() => {
-              if (session != undefined) {
-                downvotePost()
-              } else {
-                alert('You Must Be Signed In')
-              }
-            }}
-          />
+
+          <IconContext.Provider
+            value={{ color: `${color?.color == 'blue' ? color?.color : ''}` }}
+          >
+            <TbArrowBigDown
+              className={`w-6 h-6 cursor-pointer rounded ${
+                color?.color == 'blue' ? 'bg-blue-100' : ''
+              }`}
+              onClick={() => {
+                if (session != undefined) {
+                  downvotePost()
+                } else {
+                  alert('You Must Be Signed In')
+                }
+              }}
+            />
+          </IconContext.Provider>
         </div>
         <div className="flex flex-col w-full">
           <div className="flex flex-col">
@@ -241,13 +347,14 @@ export default function Post() {
           <form className="pb-2" onSubmit={sendComment}>
             <p>Comment as {session?.user?.name}</p>
             <textarea
-              className="border-2 w-11/12 h-40"
+              className="border-2 w-11/12 h-40 p-2"
               value={commentContent}
               onChange={handleCommentChange}
             ></textarea>
             <button
               type="submit"
               className="bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6"
+              disabled={commentContent == ''}
             >
               Comment
             </button>
@@ -268,14 +375,46 @@ export default function Post() {
                   upvoteComment(item.id)
                 }}
               >
-                <TbArrowBigTop className="w-5 h-5 cursor-pointer" />
+                <IconContext.Provider
+                  value={{
+                    color: `${
+                      commentColor[index]?.voted == 'upvoted'
+                        ? commentColor[index]?.color
+                        : ''
+                    }`,
+                  }}
+                >
+                  <TbArrowBigTop
+                    className={`w-5 h-5 cursor-pointer ${
+                      commentColor[index]?.voted == 'upvoted'
+                        ? 'bg-orange-100'
+                        : ''
+                    }`}
+                  />
+                </IconContext.Provider>
               </button>
 
               <p className="font-medium">
                 {item.votes != 0 ? item.votes : 'vote'}
               </p>
               <button onClick={() => downvoteComment(item.id)}>
-                <TbArrowBigDown className="w-5 h-5" />
+                <IconContext.Provider
+                  value={{
+                    color: `${
+                      commentColor[index]?.voted == 'downvoted'
+                        ? commentColor[index]?.color
+                        : ''
+                    }`,
+                  }}
+                >
+                  <TbArrowBigDown
+                    className={`w-5 h-5 ${
+                      commentColor[index]?.voted == 'downvoted'
+                        ? 'bg-blue-100'
+                        : ''
+                    }`}
+                  />
+                </IconContext.Provider>
               </button>
             </div>
           </div>
