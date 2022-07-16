@@ -1,13 +1,11 @@
 import React from 'react'
-import { FiChevronUp } from 'react-icons/fi'
 import { BsReddit } from 'react-icons/bs'
 import { useRedditContext } from './context/reddit'
 
 export default function TopReddits({
   openCreate,
   setOpenCreate,
-  communities,
-  setCommunities,
+  communities
 }) {
   const [reddit, setReddit] = useRedditContext()
 
@@ -23,7 +21,6 @@ export default function TopReddits({
           key={index}
         >
           <p>{index + 1}</p>
-          {/* <FiChevronUp className="shrink-0" /> */}
           <BsReddit className="w-7 h-7 shrink-0" />
           <p className="truncate">r/{item}</p>
           <button

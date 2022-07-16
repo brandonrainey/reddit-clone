@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { collection, addDoc, setDoc, doc, onSnapshot } from 'firebase/firestore'
+import { collection, setDoc, doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase'
 import Header from '../components/Header'
 import { FiChevronDown } from 'react-icons/fi'
 import { v4 as uuidv4 } from 'uuid'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRedditContext } from '../components/context/reddit'
 import { useRouter } from 'next/router'
 
@@ -16,8 +16,6 @@ export default function MakePost() {
   const { data: session } = useSession()
 
   const colRef = collection(db, 'stuff')
-
-  const voteRef = collection(db, 'posts')
 
   const [postContent, setPostContent] = useState('')
 
@@ -106,7 +104,7 @@ export default function MakePost() {
               value={titleContent}
             ></input>
             <textarea
-              className="w-full h-72 border-1 mb-8 rounded max-h-72 min-h-custom pl-2 pt-2"
+              className="w-full h-72 border-1 mb-8 rounded max-h-60 min-h-custom pl-2 pt-2"
               placeholder="Text(optional)"
               onChange={handlePostChange}
               value={postContent}

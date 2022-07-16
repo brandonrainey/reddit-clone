@@ -15,8 +15,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRedditContext } from '../components/context/reddit'
 
-
-export default function Header({ communities, openCreate, setOpenCreate }) {
+export default function Header({ communities, setOpenCreate }) {
   const { data: session } = useSession()
 
   const [reddit, setReddit] = useRedditContext()
@@ -53,11 +52,10 @@ export default function Header({ communities, openCreate, setOpenCreate }) {
     }
   }
 
-  // Do something after component renders
+  
   useEffect(() => {
     document.addEventListener('mousedown', closeOpenMenus)
 
-    // clean up function before running new effect
     return () => {
       document.removeEventListener('mousedown', closeOpenMenus)
     }
@@ -107,8 +105,11 @@ export default function Header({ communities, openCreate, setOpenCreate }) {
               Communites
             </p>
             <div className="flex flex-col w-full">
-              <div className='flex gap-2 pl-2 py-1 mb-1 hover:bg-blue-100' onClick={() => setOpenCreate(true)}>
-                <AiOutlinePlus className='h-6 w-6'/>
+              <div
+                className="flex gap-2 pl-2 py-1 mb-1 hover:bg-blue-100"
+                onClick={() => setOpenCreate(true)}
+              >
+                <AiOutlinePlus className="h-6 w-6" />
                 <p>Create a Community</p>
               </div>
               {communities.map((item, index) => (

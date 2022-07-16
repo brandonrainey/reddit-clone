@@ -1,9 +1,8 @@
 import React from 'react'
-import Image from 'next/image'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FiImage, FiLink } from 'react-icons/fi'
 import Link from 'next/link'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function CreatePost() {
   const { data: session } = useSession()

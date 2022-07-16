@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { collection, addDoc, setDoc, doc } from 'firebase/firestore'
+import React, { useState } from 'react'
+import { setDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
 
-export default function CreateReddit({ openCreate, setOpenCreate }) {
+export default function CreateReddit({ setOpenCreate }) {
   const [communityContent, setComunityContent] = useState('')
 
   function handleCommunityChange(e) {

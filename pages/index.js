@@ -1,14 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import CreatePost from '../components/CreatePost'
 import Header from '../components/Header'
 import Posts from '../components/Posts'
 import TopReddits from '../components/TopReddits'
 import {
   collection,
-  addDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -114,8 +111,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center ">
-      <Header communities={communities} openCreate={openCreate}
-          setOpenCreate={setOpenCreate}/>
+      <Head>
+        <meta name="description" content="Reddit Clone by Brandon Rainey." />
+        <title>Reddit Clone</title>
+      </Head>
+      <Header
+        communities={communities}
+        openCreate={openCreate}
+        setOpenCreate={setOpenCreate}
+      />
       {openCreate ? (
         <CreateReddit
           openCreate={openCreate}

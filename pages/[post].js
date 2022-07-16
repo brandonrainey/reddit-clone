@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
   collection,
-  addDoc,
-  getDocs,
   getDoc,
   updateDoc,
   onSnapshot,
@@ -18,7 +16,7 @@ import Header from '../components/Header'
 import Banner from '../components/Banner'
 import { TbArrowBigTop, TbArrowBigDown } from 'react-icons/tb'
 import { BsChatLeft } from 'react-icons/bs'
-import { useSession, signIn } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
 import { IconContext } from 'react-icons'
@@ -278,10 +276,8 @@ export default function Post() {
     })
   }, [post])
 
-  //trying to fix comment colors, problem- all comments change on one click, problem- comments dont show color on load
   useEffect(() => {
     colorSnap()
-
     setCommentColor([])
     commentColorSnap()
   }, [currentComments, trigger])

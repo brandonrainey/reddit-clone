@@ -3,7 +3,6 @@ import { TbArrowBigTop, TbArrowBigDown } from 'react-icons/tb'
 import { BsChatLeft } from 'react-icons/bs'
 import {
   collection,
-  addDoc,
   getDocs,
   getDoc,
   updateDoc,
@@ -12,12 +11,11 @@ import {
   onSnapshot,
 } from 'firebase/firestore'
 import { db } from '../firebase'
-import { signIn, signOut, useSession } from 'next-auth/react'
-import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { IconContext } from 'react-icons'
 
-export default function Posts({ posts, setPosts, reddit, timeString }) {
+export default function Posts({ posts, reddit, timeString }) {
   const router = useRouter()
 
   const [pressedUp, setPressedUp] = useState(false)
@@ -37,8 +35,6 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
   const [allPosts, setAllPosts] = useState([])
 
   const [voteColor, setVoteColor] = useState([])
-
-  
 
   async function upvotePost() {
     const current = session.user.name
@@ -143,27 +139,24 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
 
   // maps through all post ids, making a ref for each to snapshot the votedata for each post into state
   useEffect(() => {
-
     const currentUser = session?.user?.name
     setVoteColor([])
 
     if (currentUser) {
       posts.map((item) => {
-      allPosts.map((item2) => {
-        if (item.id == item2) {
-          const rref = collection(db, 'posts', item2, currentUser)
+        allPosts.map((item2) => {
+          if (item.id == item2) {
+            const rref = collection(db, 'posts', item2, currentUser)
 
-          onSnapshot(rref, (snapshot) => {
-            
-            snapshot.docs.forEach((doc) => {
-              setVoteColor((voteColor) => [...voteColor, doc.data()])
+            onSnapshot(rref, (snapshot) => {
+              snapshot.docs.forEach((doc) => {
+                setVoteColor((voteColor) => [...voteColor, doc.data()])
+              })
             })
-          })
-        }
+          }
+        })
       })
-    })
     }
-    
   }, [reddit, posts, postIndex])
 
   return (
@@ -177,7 +170,9 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
             <IconContext.Provider
               value={{
                 color: `${
-                  voteColor[index]?.vote == 'upvoted' ? voteColor[index]?.color : ''
+                  voteColor[index]?.vote == 'upvoted'
+                    ? voteColor[index]?.color
+                    : ''
                 }`,
               }}
             >
@@ -188,9 +183,11 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
                   setPressedUp(true)
                 }}
               >
-                <TbArrowBigTop className={`w-6 h-6 ${
-                  voteColor[index]?.vote == 'upvoted' ? 'bg-orange-100' : ''
-                } rounded`} />
+                <TbArrowBigTop
+                  className={`w-6 h-6 ${
+                    voteColor[index]?.vote == 'upvoted' ? 'bg-orange-100' : ''
+                  } rounded`}
+                />
               </button>
             </IconContext.Provider>
 
@@ -212,14 +209,19 @@ export default function Posts({ posts, setPosts, reddit, timeString }) {
                   setPressedDown(true)
                 }}
               >
-                <TbArrowBigDown className={`w-6 h-6 ${
-                  voteColor[index]?.vote == 'downvoted' ? 'bg-blue-100' : ''
-                } rounded`} />
+                <TbArrowBigDown
+                  className={`w-6 h-6 ${
+                    voteColor[index]?.vote == 'downvoted' ? 'bg-blue-100' : ''
+                  } rounded`}
+                />
               </button>
             </IconContext.Provider>
           </div>
           {/* post */}
-          <div className="flex flex-col w-full pl-2 cursor-pointer" onClick={() => router.push(`/${item.id}`)}>
+          <div
+            className="flex flex-col w-full pl-2 cursor-pointer"
+            onClick={() => router.push(`/${item.id}`)}
+          >
             {/* reddit */}
             <div className="flex flex-wrap items-center pt-1">
               <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
