@@ -100,6 +100,7 @@ export default function Posts({ posts, reddit, timeString }) {
     setPostIndex('')
   }
 
+  //sets post id from clicked post's index
   useEffect(() => {
     getDocs(colRef).then((snapshot) => {
       snapshot.docs.forEach((doc, index) => {
@@ -112,6 +113,7 @@ export default function Posts({ posts, reddit, timeString }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postIndex])
 
+  //runs upvote or downvote function
   useEffect(() => {
     if (pressedUp) {
       upvotePost()
@@ -160,13 +162,13 @@ export default function Posts({ posts, reddit, timeString }) {
   }, [reddit, posts, postIndex])
 
   return (
-    <div className="flex  mt-4 flex-col ">
+    <div className='flex  mt-4 flex-col '>
       {posts.map((item, index) => (
         <div
-          className="flex mb-4 border-1 border-gray-300 rounded-sm"
+          className='flex mb-4 border-1 border-gray-300 rounded-sm'
           key={index}
         >
-          <div className="flex flex-col items-center bg-gray-50 w-10 self-center">
+          <div className='flex flex-col items-center bg-gray-50 w-10 self-center'>
             <IconContext.Provider
               value={{
                 color: `${
@@ -221,33 +223,33 @@ export default function Posts({ posts, reddit, timeString }) {
           </div>
           {/* post */}
           <div
-            className="flex flex-col w-full pl-2 cursor-pointer"
+            className='flex flex-col w-full pl-2 cursor-pointer'
             onClick={() => router.push(`/${item.id}`)}
           >
             {/* reddit */}
-            <div className="flex flex-wrap items-center pt-1">
-              <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
+            <div className='flex flex-wrap items-center pt-1'>
+              <p className='mr-2 font-semibold text-sm'>r/{reddit}</p>
 
-              <p className="text-sm text-slate-500">
+              <p className='text-sm text-slate-500'>
                 Posted by u/{item.user} {item.timeDifference} {timeString} ago
               </p>
             </div>
             {/* title */}
             <div>
-              <p className="font-bold text-lg">{item.title}</p>
+              <p className='font-bold text-lg'>{item.title}</p>
             </div>
             {/* content */}
-            <div className="">
-              <p className=" pr-8 ">{item.content}</p>
+            <div className=''>
+              <p className=' pr-8 '>{item.content}</p>
             </div>
             {/* bottom */}
 
-            <div className="flex">
+            <div className='flex'>
               <div
-                className="flex items-center justify-center gap-2 cursor-pointer"
+                className='flex items-center justify-center gap-2 cursor-pointer'
                 onClick={() => router.push(`/${item.id}`)}
               >
-                <BsChatLeft className="" />
+                <BsChatLeft className='' />
                 <p>Comments</p>
               </div>
             </div>

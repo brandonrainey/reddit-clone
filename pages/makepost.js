@@ -57,6 +57,7 @@ export default function MakePost() {
     setPostReddit(undefined)
   }
 
+  //sets array of reddits
   useEffect(() => {
     onSnapshot(colRef, (snapshot) => {
       setRedditList([])
@@ -68,21 +69,21 @@ export default function MakePost() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center bg-blue-100">
+    <div className='flex flex-col items-center bg-blue-100'>
       <Header />
-      <div className="flex w-11/12 max-w-3xl h-screen mt-6 flex-col ">
+      <div className='flex w-11/12 max-w-3xl h-screen mt-6 flex-col '>
         <div
-          className=" flex items-center relative border-1 w-52 bg-white p-1 text-left mb-2 shadow font-medium text-gray-700 cursor-pointer "
+          className=' flex items-center relative border-1 w-52 bg-white p-1 text-left mb-2 shadow font-medium text-gray-700 cursor-pointer '
           onClick={() => setRedditMenuOpen(!redditMenuOpen)}
         >
           <p>{postReddit ? `r/${postReddit}` : 'Choose Reddit'}</p>
-          <FiChevronDown className="ml-auto" />
+          <FiChevronDown className='ml-auto' />
         </div>
         {redditMenuOpen ? (
-          <div className="bg-white w-52 absolute top-28 shadow border-x-1 border-b-1 h-auto">
+          <div className='bg-white w-52 absolute top-28 shadow border-x-1 border-b-1 h-auto'>
             {redditList.map((item, index) => (
               <p
-                className="pb-1 pl-2 hover:bg-blue-100 cursor-pointer"
+                className='pb-1 pl-2 hover:bg-blue-100 cursor-pointer'
                 onClick={() => {
                   setPostReddit(item)
                   setRedditMenuOpen(false)
@@ -95,24 +96,24 @@ export default function MakePost() {
           </div>
         ) : null}
 
-        <div className="w-full border-2 border-grey h-1/2 bg-white shadow">
-          <form onSubmit={sendPost} className="flex flex-col p-4">
+        <div className='w-full border-2 border-grey h-1/2 bg-white shadow'>
+          <form onSubmit={sendPost} className='flex flex-col p-4'>
             <input
-              placeholder="Title "
-              className="border-1 h-10 mb-2 rounded pl-2"
+              placeholder='Title '
+              className='border-1 h-10 mb-2 rounded pl-2'
               onChange={handleTitleChange}
               value={titleContent}
             ></input>
             <textarea
-              className="w-full h-72 border-1 mb-8 rounded max-h-60 min-h-custom pl-2 pt-2"
-              placeholder="Text(optional)"
+              className='w-full h-72 border-1 mb-8 rounded max-h-60 min-h-custom pl-2 pt-2'
+              placeholder='Text(optional)'
               onChange={handlePostChange}
               value={postContent}
             ></textarea>
 
             <button
-              type="submit"
-              className="border-1 bg-gray-500 w-16 p-1 rounded-3xl ml-auto hover:bg-gray-400 text-white font-medium"
+              type='submit'
+              className='border-1 bg-gray-500 w-16 p-1 rounded-3xl ml-auto hover:bg-gray-400 text-white font-medium'
               onClick={() => router.push('/')}
             >
               Post
