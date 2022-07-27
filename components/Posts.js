@@ -182,6 +182,7 @@ export default function Posts({ posts, reddit, timeString }) {
                   setPostIndex(item.id)
                   setPressedUp(true)
                 }}
+                aria-label='upvote post'
               >
                 <TbArrowBigTop
                   className={`w-6 h-6 ${
@@ -208,6 +209,7 @@ export default function Posts({ posts, reddit, timeString }) {
                   setPostIndex(item.id)
                   setPressedDown(true)
                 }}
+                aria-label='downvote post'
               >
                 <TbArrowBigDown
                   className={`w-6 h-6 ${

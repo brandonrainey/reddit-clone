@@ -302,6 +302,7 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
+              aria-label='upvote post'
             />
           </IconContext.Provider>
 
@@ -321,6 +322,7 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
+              aria-label='downvote post'
             />
           </IconContext.Provider>
         </div>

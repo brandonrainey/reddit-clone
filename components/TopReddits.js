@@ -26,6 +26,7 @@ export default function TopReddits({
           <button
             className="ml-auto border-1 rounded-2xl pl-3 pr-3 bg-blue-400 text-white font-medium"
             onClick={() => setReddit(item)}
+            aria-label='view reddit'
           >
             View
           </button>
@@ -36,6 +37,7 @@ export default function TopReddits({
         <button
           className="bg-blue-400 text-white w-44 p-2 rounded-3xl text-base font-medium"
           onClick={() => setOpenCreate(!openCreate)}
+          aria-label='create reddit'
         >
           Create a Community
         </button>
