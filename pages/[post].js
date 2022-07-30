@@ -16,7 +16,7 @@ import Header from '../components/Header'
 import Banner from '../components/Banner'
 import { TbArrowBigTop, TbArrowBigDown } from 'react-icons/tb'
 import { BsChatLeft } from 'react-icons/bs'
-import { useSession } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
 import { IconContext } from 'react-icons'
@@ -60,7 +60,8 @@ export default function Post() {
   async function commentColorSnap(id) {
     setCommentColor([])
 
-    currentComments.map(async (item) => {
+    if (currentUser) {
+      currentComments.map(async (item) => {
       const colorRef = doc(
         db,
         'posts',
@@ -73,6 +74,8 @@ export default function Post() {
       const result = await getDoc(colorRef)
       setCommentColor((commentColor) => [...commentColor, result.data()])
     })
+    }
+    
   }
 
   const [commentContent, setCommentContent] = useState('')
@@ -266,10 +269,13 @@ export default function Post() {
 
   //sets colors of vote arrows
   useEffect(() => {
-    colorSnap()
+
+    currentUser ? colorSnap() : null
     setCommentColor([])
     commentColorSnap()
   }, [currentComments, trigger])
+
+  
 
   return (
     <div className='flex flex-col items-center'>
@@ -331,7 +337,7 @@ export default function Post() {
               </div>
             </div>
           </div>
-          <form className='pb-2' onSubmit={sendComment}>
+          <form className='pb-2' onSubmit={session?.user?.name ? sendComment : signIn}>
             <p>Comment as {session?.user?.name}</p>
             <textarea
               className='border-2 w-11/12 h-40 p-2'
@@ -343,7 +349,7 @@ export default function Post() {
               className='bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6'
               disabled={commentContent == ''}
             >
-              Comment
+              {`${session?.user?.name ? 'Comment' : 'Sign In to comment'}`}
             </button>
           </form>
         </div>
