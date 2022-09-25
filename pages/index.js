@@ -85,6 +85,7 @@ export default function Home() {
 
   const q = query(postRef, orderBy('votes', 'desc'))
 
+  //sets array of current reddit's posts
   useEffect(() => {
     onSnapshot(q, (snapshot) => {
       setPosts([])
@@ -95,6 +96,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reddit])
 
+  //sets array of all reddit's on load
   useEffect(() => {
     console.log('runs')
     onSnapshot(colRef, (snapshot) => {
@@ -106,6 +108,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  //calculate and sets time difference from post start to current date for each post
   useEffect(() => {
     posts.forEach((item) => {
       const data = calculateTime(item.date, date2)
@@ -122,9 +125,9 @@ export default function Home() {
   
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className='flex flex-col items-center '>
       <Head>
-        <meta name="description" content="Reddit Clone by Brandon Rainey." />
+        <meta name='description' content='Reddit Clone by Brandon Rainey.' />
         <title>Reddit Clone</title>
       </Head>
       <Header
@@ -143,8 +146,8 @@ export default function Home() {
         />
       ) : null}
       <Banner reddit={reddit} />
-      <div className="flex w-full  h-screen mt-6 justify-center ">
-        <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
+      <div className='flex w-full  h-screen mt-6 justify-center '>
+        <div className='w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 '>
           <CreatePost />
           <Posts
             posts={posts}

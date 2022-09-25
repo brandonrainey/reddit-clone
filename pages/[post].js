@@ -16,7 +16,7 @@ import Header from '../components/Header'
 import Banner from '../components/Banner'
 import { TbArrowBigTop, TbArrowBigDown } from 'react-icons/tb'
 import { BsChatLeft } from 'react-icons/bs'
-import { useSession } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { BsReddit } from 'react-icons/bs'
 import { v4 as uuidv4 } from 'uuid'
 import { IconContext } from 'react-icons'
@@ -58,10 +58,12 @@ export default function Post() {
     }
   }
 
+  //set array of current comments vote colors
   async function commentColorSnap(id) {
     setCommentColor([])
 
     if (currentUser) {
+      if (currentUser) {
       currentComments.map(async (item) => {
       const colorRef = doc(
         db,
@@ -121,6 +123,7 @@ export default function Post() {
 
   async function upvotePost() {
     const current = session.user.name
+
     const postRef = doc(db, 'stuff', reddit, 'posts', post)
 
     const postSnap = await getDoc(postRef)
@@ -213,22 +216,6 @@ export default function Post() {
       console.log('upvote trig')
       setTrigger(!trigger)
     }
-
-    // if (currentUser == 'upvoted') {
-    //   if (commentSnap.data().votes == 1) {
-    //     await updateDoc(commentRef, {
-    //       votes: 0,
-    //     })
-
-    //     await setDoc(voteRef, {
-    //       voted: '',
-    //       color: '',
-    //     })
-    //   } else {
-    //     downvoteComment(id)
-    //   }
-
-    // }
   }
 
   async function downvoteComment(id) {
@@ -261,6 +248,7 @@ export default function Post() {
     }
   }
 
+  //set array of current post comments
   useEffect(() => {
     onSnapshot(q, (snapshot) => {
       setCurrentComments([])
@@ -275,6 +263,7 @@ export default function Post() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post, uniqueId])
 
+  //sets current post data to state
   useEffect(() => {
     onSnapshot(postRef, (snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -285,8 +274,10 @@ export default function Post() {
     })
   }, [post])
 
+  //sets colors of vote arrows
   useEffect(() => {
-    colorSnap()
+
+    currentUser ? colorSnap() : null
     setCommentColor([])
     commentColorSnap()
   }, [currentComments, trigger])
@@ -294,11 +285,11 @@ export default function Post() {
   console.log(reddit)
 
   return (
-    <div className="flex flex-col items-center">
+    <div className='flex flex-col items-center'>
       <Header />
       <Banner reddit={reddit} />
-      <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2">
-        <div className="flex flex-col items-center w-10">
+      <div className='flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2'>
+        <div className='flex flex-col items-center w-10'>
           <IconContext.Provider
             value={{ color: `${color?.color == 'orange' ? color?.color : ''}` }}
           >
@@ -313,6 +304,7 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
+              aria-label='upvote post'
             />
           </IconContext.Provider>
 
@@ -332,51 +324,52 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
+              aria-label='downvote post'
             />
           </IconContext.Provider>
         </div>
-        <div className="flex flex-col w-full">
-          <div className="flex flex-col">
-            <p className="pb-2 text-sm text-slate-500">
+        <div className='flex flex-col w-full'>
+          <div className='flex flex-col'>
+            <p className='pb-2 text-sm text-slate-500'>
               Posted by {currentPost?.user}
             </p>
-            <p className="font-bold text-xl pb-2">{currentPost?.title}</p>
-            <p className="pb-1">{currentPost?.content}</p>
-            <div className="flex">
-              <div className="flex items-center justify-center gap-2">
-                <BsChatLeft className="h-4" />
-                <p className="text-slate-400 font-bold text-sm">
+            <p className='font-bold text-xl pb-2'>{currentPost?.title}</p>
+            <p className='pb-1'>{currentPost?.content}</p>
+            <div className='flex'>
+              <div className='flex items-center justify-center gap-2'>
+                <BsChatLeft className='h-4' />
+                <p className='text-slate-400 font-bold text-sm'>
                   {currentComments?.length} Comments
                 </p>
               </div>
             </div>
           </div>
-          <form className="pb-2" onSubmit={sendComment}>
+          <form className='pb-2' onSubmit={session?.user?.name ? sendComment : signIn}>
             <p>Comment as {session?.user?.name}</p>
             <textarea
-              className="border-2 w-11/12 h-40 p-2"
+              className='border-2 w-11/12 h-40 p-2'
               value={commentContent}
               onChange={handleCommentChange}
             ></textarea>
             <button
-              type="submit"
-              className="bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6"
+              type='submit'
+              className='bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6'
               disabled={commentContent == ''}
             >
-              Comment
+              {`${session?.user?.name ? 'Comment' : 'Sign In to comment'}`}
             </button>
           </form>
         </div>
       </div>
-      <div className="border-2 w-full sm:w-1/2 h-auto mb-4">
+      <div className='border-2 w-full sm:w-1/2 h-auto mb-4'>
         {currentComments.map((item, index) => (
-          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1" key={index}>
-            <div className="flex pb-2 gap-2 text-sm font-medium">
-              <BsReddit className="h-6 w-6" />
+          <div className='flex flex-col pl-4 pt-4 gap-2 border-b-1' key={index}>
+            <div className='flex pb-2 gap-2 text-sm font-medium'>
+              <BsReddit className='h-6 w-6' />
               {item?.user}
             </div>
-            <div className="indent-6 pb-2">{item?.content}</div>
-            <div className="flex gap-1 ml-4 items-center">
+            <div className='indent-6 pb-2'>{item?.content}</div>
+            <div className='flex gap-1 ml-4 items-center'>
               <button
                 onClick={() => {
                   upvoteComment(item.id)
@@ -401,7 +394,7 @@ export default function Post() {
                 </IconContext.Provider>
               </button>
 
-              <p className="font-medium">
+              <p className='font-medium'>
                 {item.votes != 0 ? item.votes : 'vote'}
               </p>
               <button onClick={() => downvoteComment(item.id)}>
