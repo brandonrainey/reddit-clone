@@ -84,6 +84,7 @@ export default function Post() {
 
 
   }
+}
 
   const [commentContent, setCommentContent] = useState('')
 
