@@ -9,7 +9,7 @@ import { useRedditContext } from '../components/context/reddit'
 import { useRouter } from 'next/router'
 
 export default function MakePost() {
-  const [reddit, setReddit] = useRedditContext()
+  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
 
   const router = useRouter()
 
