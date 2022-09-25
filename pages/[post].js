@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { IconContext } from 'react-icons'
 
 export default function Post() {
-  const [reddit, setReddit] = useRedditContext()
+  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
 
   const router = useRouter()
 
@@ -51,15 +51,18 @@ export default function Post() {
   const [trigger, setTrigger] = useState(false)
 
   async function colorSnap() {
-    const colorRef = doc(db, 'posts', post, currentUser, 'voteData')
-    const result = await getDoc(colorRef)
-    setColor(result.data())
+    if (currentUser) {
+      const colorRef = doc(db, 'posts', post, currentUser, 'voteData')
+      const result = await getDoc(colorRef)
+      setColor(result.data())
+    }
   }
 
   async function commentColorSnap(id) {
     setCommentColor([])
 
-    currentComments.map(async (item) => {
+    if (currentUser) {
+      currentComments.map(async (item) => {
       const colorRef = doc(
         db,
         'posts',
@@ -72,6 +75,12 @@ export default function Post() {
       const result = await getDoc(colorRef)
       setCommentColor((commentColor) => [...commentColor, result.data()])
     })
+    }
+
+    
+
+
+
   }
 
   const [commentContent, setCommentContent] = useState('')
@@ -281,6 +290,8 @@ export default function Post() {
     setCommentColor([])
     commentColorSnap()
   }, [currentComments, trigger])
+
+  console.log(reddit)
 
   return (
     <div className="flex flex-col items-center">

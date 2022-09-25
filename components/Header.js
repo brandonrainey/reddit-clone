@@ -14,11 +14,14 @@ import { IoLogoReddit } from 'react-icons/io'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRedditContext } from '../components/context/reddit'
+import { useRouter } from 'next/router'
 
-export default function Header({ communities, setOpenCreate }) {
+export default function Header({ }) {
   const { data: session } = useSession()
 
-  const [reddit, setReddit] = useRedditContext()
+  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
+
+  const router = useRouter()
 
   const [open, setOpen] = useState(null)
 
@@ -31,6 +34,8 @@ export default function Header({ communities, setOpenCreate }) {
   const homeButton = useRef()
 
   const [homeMenu, setHomeMenu] = useState(null)
+
+  
 
   const closeOpenMenus = (e) => {
     if (
@@ -61,6 +66,9 @@ export default function Header({ communities, setOpenCreate }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, homeMenu])
+
+
+  
 
   return (
     <div className="flex border-b h-14 pt-2 pb-2 w-full  bg-white">
@@ -112,12 +120,13 @@ export default function Header({ communities, setOpenCreate }) {
                 <AiOutlinePlus className="h-6 w-6" />
                 <p>Create a Community</p>
               </div>
-              {communities.map((item, index) => (
+              {communities?.map((item, index) => (
                 <div
                   className="hover:bg-blue-100 py-1 pl-4 tracking-wide "
                   onClick={() => {
                     setReddit(item)
                     setHomeMenu(false)
+                    router.push(`/`)
                   }}
                   key={index}
                 >
@@ -146,7 +155,7 @@ export default function Header({ communities, setOpenCreate }) {
 
         <input
           className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0 rounded-none"
-          placeholder="Search Reddit"
+          placeholder={`Search`}
         />
       </form>
 

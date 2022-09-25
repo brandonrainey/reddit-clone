@@ -3,11 +3,10 @@ import { BsReddit } from 'react-icons/bs'
 import { useRedditContext } from './context/reddit'
 
 export default function TopReddits({
-  openCreate,
-  setOpenCreate,
-  communities
+  
 }) {
-  const [reddit, setReddit] = useRedditContext()
+  
+  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
 
   return (
     <div className="hidden w-60 border-1 border-gray-300 h-1/2 ml-12 custom:flex flex-col rounded ">

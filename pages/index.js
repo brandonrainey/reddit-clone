@@ -16,19 +16,26 @@ import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
 import { useRedditContext } from '../components/context/reddit'
 import Banner from '../components/Banner'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  const [reddit, setReddit] = useRedditContext()
+
+  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
+  
+
+  const router = useRouter()
+
+  
 
   const [timeDifference, setTimeDifference] = useState()
 
   const [timeString, setTimeString] = useState()
 
-  const [communities, setCommunities] = useState([])
+  
 
   const [posts, setPosts] = useState([])
 
-  const [openCreate, setOpenCreate] = useState(false)
+  
 
   const colRef = collection(db, 'stuff')
 
@@ -39,6 +46,8 @@ export default function Home() {
   const [date1, setDate1] = useState()
 
   const date2 = Date.now()
+
+  const [testState, setTestState] = useState('test')
 
   function getDifferenceInDays(date1, date2) {
     const diffInMs = Math.abs(date2 - date1)
@@ -87,6 +96,7 @@ export default function Home() {
   }, [reddit])
 
   useEffect(() => {
+    console.log('runs')
     onSnapshot(colRef, (snapshot) => {
       setCommunities([])
       snapshot.docs.forEach((doc) => {
@@ -109,6 +119,8 @@ export default function Home() {
     })
   }, [posts])
 
+  
+
   return (
     <div className="flex flex-col items-center ">
       <Head>
@@ -119,6 +131,8 @@ export default function Home() {
         communities={communities}
         openCreate={openCreate}
         setOpenCreate={setOpenCreate}
+        testState={testState}
+        reddit={reddit}
       />
       {openCreate ? (
         <CreateReddit
@@ -147,6 +161,7 @@ export default function Home() {
           setOpenCreate={setOpenCreate}
           communities={communities}
           setCommunities={setCommunities}
+          reddit={reddit}
         />
       </div>
     </div>

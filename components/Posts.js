@@ -14,6 +14,7 @@ import { db } from '../firebase'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { IconContext } from 'react-icons'
+import Link from 'next/link'
 
 export default function Posts({ posts, reddit, timeString }) {
   const router = useRouter()
@@ -159,6 +160,8 @@ export default function Posts({ posts, reddit, timeString }) {
     }
   }, [reddit, posts, postIndex])
 
+  
+
   return (
     <div className="flex  mt-4 flex-col ">
       {posts.map((item, index) => (
@@ -235,7 +238,7 @@ export default function Posts({ posts, reddit, timeString }) {
               <p className="font-bold text-lg">{item.title}</p>
             </div>
             {/* content */}
-            <div className="">
+            <div className="" href={`${item.id}`}>
               <p className=" pr-8 ">{item.content}</p>
             </div>
             {/* bottom */}
