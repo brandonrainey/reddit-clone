@@ -1,6 +1,6 @@
-import "../styles/globals.css";
-import { SessionProvider } from "next-auth/react";
-import { RedditProvider } from "../components/context/reddit";
+import '../styles/globals.css'
+import { SessionProvider } from 'next-auth/react'
+import { RedditProvider } from '../components/context/reddit'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Component {...pageProps} />
       </RedditProvider>
     </SessionProvider>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

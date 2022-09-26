@@ -16,26 +16,23 @@ import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
 import { useRedditContext } from '../components/context/reddit'
 import Banner from '../components/Banner'
-import { useRouter } from 'next/router'
+
 
 export default function Home() {
-
-  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
-  
-
-  const router = useRouter()
-
-  
+  const {
+    reddit,
+    setReddit,
+    communities,
+    setCommunities,
+    openCreate,
+    setOpenCreate,
+  } = useRedditContext()
 
   const [timeDifference, setTimeDifference] = useState()
 
   const [timeString, setTimeString] = useState()
 
-  
-
   const [posts, setPosts] = useState([])
-
-  
 
   const colRef = collection(db, 'stuff')
 
@@ -122,12 +119,10 @@ export default function Home() {
     })
   }, [posts])
 
-  
-
   return (
-    <div className='flex flex-col items-center '>
+    <div className="flex flex-col items-center ">
       <Head>
-        <meta name='description' content='Reddit Clone by Brandon Rainey.' />
+        <meta name="description" content="Reddit Clone by Brandon Rainey." />
         <title>Reddit Clone</title>
       </Head>
       <Header
@@ -146,8 +141,8 @@ export default function Home() {
         />
       ) : null}
       <Banner reddit={reddit} />
-      <div className='flex w-full  h-screen mt-6 justify-center '>
-        <div className='w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 '>
+      <div className="flex w-full  h-screen mt-6 justify-center ">
+        <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
           <CreatePost />
           <Posts
             posts={posts}

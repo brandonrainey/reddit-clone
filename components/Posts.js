@@ -14,7 +14,7 @@ import { db } from '../firebase'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { IconContext } from 'react-icons'
-import Link from 'next/link'
+
 
 export default function Posts({ posts, reddit, timeString }) {
   const router = useRouter()
@@ -162,16 +162,14 @@ export default function Posts({ posts, reddit, timeString }) {
     }
   }, [reddit, posts, postIndex])
 
-  
-
   return (
-    <div className='flex  mt-4 flex-col '>
+    <div className="flex  mt-4 flex-col ">
       {posts.map((item, index) => (
         <div
-          className='flex mb-4 border-1 border-gray-300 rounded-sm'
+          className="flex mb-4 border-1 border-gray-300 rounded-sm"
           key={index}
         >
-          <div className='flex flex-col items-center bg-gray-50 w-10 self-center'>
+          <div className="flex flex-col items-center bg-gray-50 w-10 self-center">
             <IconContext.Provider
               value={{
                 color: `${
@@ -187,7 +185,7 @@ export default function Posts({ posts, reddit, timeString }) {
                   setPostIndex(item.id)
                   setPressedUp(true)
                 }}
-                aria-label='upvote post'
+                aria-label="upvote post"
               >
                 <TbArrowBigTop
                   className={`w-6 h-6 ${
@@ -214,7 +212,7 @@ export default function Posts({ posts, reddit, timeString }) {
                   setPostIndex(item.id)
                   setPressedDown(true)
                 }}
-                aria-label='downvote post'
+                aria-label="downvote post"
               >
                 <TbArrowBigDown
                   className={`w-6 h-6 ${
@@ -226,20 +224,20 @@ export default function Posts({ posts, reddit, timeString }) {
           </div>
           {/* post */}
           <div
-            className='flex flex-col w-full pl-2 cursor-pointer'
+            className="flex flex-col w-full pl-2 cursor-pointer"
             onClick={() => router.push(`/${item.id}`)}
           >
             {/* reddit */}
-            <div className='flex flex-wrap items-center pt-1'>
-              <p className='mr-2 font-semibold text-sm'>r/{reddit}</p>
+            <div className="flex flex-wrap items-center pt-1">
+              <p className="mr-2 font-semibold text-sm">r/{reddit}</p>
 
-              <p className='text-sm text-slate-500'>
+              <p className="text-sm text-slate-500">
                 Posted by u/{item.user} {item.timeDifference} {timeString} ago
               </p>
             </div>
             {/* title */}
             <div>
-              <p className='font-bold text-lg'>{item.title}</p>
+              <p className="font-bold text-lg">{item.title}</p>
             </div>
             {/* content */}
             <div className="" href={`${item.id}`}>
@@ -247,12 +245,12 @@ export default function Posts({ posts, reddit, timeString }) {
             </div>
             {/* bottom */}
 
-            <div className='flex'>
+            <div className="flex">
               <div
-                className='flex items-center justify-center gap-2 cursor-pointer'
+                className="flex items-center justify-center gap-2 cursor-pointer"
                 onClick={() => router.push(`/${item.id}`)}
               >
-                <BsChatLeft className='' />
+                <BsChatLeft className="" />
                 <p>Comments</p>
               </div>
             </div>

@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { IconContext } from 'react-icons'
 
 export default function Post() {
-  const { reddit, setReddit, communities, setCommunities, openCreate, setOpenCreate} = useRedditContext()
+  const { reddit } = useRedditContext()
 
   const router = useRouter()
 
@@ -64,27 +64,22 @@ export default function Post() {
 
     if (currentUser) {
       if (currentUser) {
-      currentComments.map(async (item) => {
-      const colorRef = doc(
-        db,
-        'posts',
-        post,
-        'comments',
-        item.id,
-        currentUser,
-        'voteData'
-      )
-      const result = await getDoc(colorRef)
-      setCommentColor((commentColor) => [...commentColor, result.data()])
-    })
+        currentComments.map(async (item) => {
+          const colorRef = doc(
+            db,
+            'posts',
+            post,
+            'comments',
+            item.id,
+            currentUser,
+            'voteData'
+          )
+          const result = await getDoc(colorRef)
+          setCommentColor((commentColor) => [...commentColor, result.data()])
+        })
+      }
     }
-
-    
-
-
-
   }
-}
 
   const [commentContent, setCommentContent] = useState('')
 
@@ -277,7 +272,6 @@ export default function Post() {
 
   //sets colors of vote arrows
   useEffect(() => {
-
     currentUser ? colorSnap() : null
     setCommentColor([])
     commentColorSnap()
@@ -286,11 +280,11 @@ export default function Post() {
   console.log(reddit)
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className="flex flex-col items-center">
       <Header />
       <Banner reddit={reddit} />
-      <div className='flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2'>
-        <div className='flex flex-col items-center w-10'>
+      <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2">
+        <div className="flex flex-col items-center w-10">
           <IconContext.Provider
             value={{ color: `${color?.color == 'orange' ? color?.color : ''}` }}
           >
@@ -305,7 +299,7 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
-              aria-label='upvote post'
+              aria-label="upvote post"
             />
           </IconContext.Provider>
 
@@ -325,36 +319,39 @@ export default function Post() {
                   alert('You Must Be Signed In')
                 }
               }}
-              aria-label='downvote post'
+              aria-label="downvote post"
             />
           </IconContext.Provider>
         </div>
-        <div className='flex flex-col w-full'>
-          <div className='flex flex-col'>
-            <p className='pb-2 text-sm text-slate-500'>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col">
+            <p className="pb-2 text-sm text-slate-500">
               Posted by {currentPost?.user}
             </p>
-            <p className='font-bold text-xl pb-2'>{currentPost?.title}</p>
-            <p className='pb-1'>{currentPost?.content}</p>
-            <div className='flex'>
-              <div className='flex items-center justify-center gap-2'>
-                <BsChatLeft className='h-4' />
-                <p className='text-slate-400 font-bold text-sm'>
+            <p className="font-bold text-xl pb-2">{currentPost?.title}</p>
+            <p className="pb-1">{currentPost?.content}</p>
+            <div className="flex">
+              <div className="flex items-center justify-center gap-2">
+                <BsChatLeft className="h-4" />
+                <p className="text-slate-400 font-bold text-sm">
                   {currentComments?.length} Comments
                 </p>
               </div>
             </div>
           </div>
-          <form className='pb-2' onSubmit={session?.user?.name ? sendComment : signIn}>
+          <form
+            className="pb-2"
+            onSubmit={session?.user?.name ? sendComment : signIn}
+          >
             <p>Comment as {session?.user?.name}</p>
             <textarea
-              className='border-2 w-11/12 h-40 p-2'
+              className="border-2 w-11/12 h-40 p-2"
               value={commentContent}
               onChange={handleCommentChange}
             ></textarea>
             <button
-              type='submit'
-              className='bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6'
+              type="submit"
+              className="bg-slate-500 text-white font-medium rounded-xl pl-2 pr-2 text-sm h-6"
               disabled={commentContent == ''}
             >
               {`${session?.user?.name ? 'Comment' : 'Sign In to comment'}`}
@@ -362,15 +359,15 @@ export default function Post() {
           </form>
         </div>
       </div>
-      <div className='border-2 w-full sm:w-1/2 h-auto mb-4'>
+      <div className="border-2 w-full sm:w-1/2 h-auto mb-4">
         {currentComments.map((item, index) => (
-          <div className='flex flex-col pl-4 pt-4 gap-2 border-b-1' key={index}>
-            <div className='flex pb-2 gap-2 text-sm font-medium'>
-              <BsReddit className='h-6 w-6' />
+          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1" key={index}>
+            <div className="flex pb-2 gap-2 text-sm font-medium">
+              <BsReddit className="h-6 w-6" />
               {item?.user}
             </div>
-            <div className='indent-6 pb-2'>{item?.content}</div>
-            <div className='flex gap-1 ml-4 items-center'>
+            <div className="indent-6 pb-2">{item?.content}</div>
+            <div className="flex gap-1 ml-4 items-center">
               <button
                 onClick={() => {
                   upvoteComment(item.id)
@@ -395,7 +392,7 @@ export default function Post() {
                 </IconContext.Provider>
               </button>
 
-              <p className='font-medium'>
+              <p className="font-medium">
                 {item.votes != 0 ? item.votes : 'vote'}
               </p>
               <button onClick={() => downvoteComment(item.id)}>
