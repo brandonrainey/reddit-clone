@@ -120,7 +120,7 @@ export default function Home() {
   }, [posts])
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center min-w-[350px]">
       <Head>
         <meta name="description" content="Reddit Clone by Brandon Rainey." />
         <title>Reddit Clone</title>
