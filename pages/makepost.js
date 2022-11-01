@@ -96,7 +96,7 @@ export default function MakePost() {
           </div>
         ) : null}
 
-        <div className="w-full border-2 border-grey max-h-[400px] h-1/2 bg-white shadow">
+        <div className="w-full border-2 border-grey max-h-[420px] h-1/2 bg-white shadow">
           <form onSubmit={sendPost} className="flex flex-col p-4">
             <input
               placeholder="Title "
