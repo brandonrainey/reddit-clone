@@ -152,13 +152,14 @@ export default function Header({}) {
 
       {/* search */}
       <form className="flex w-full mr-2 min-w-search hover:border-blue-500 group">
-        <div className="flex h-full w-10 border-t-1 border-b-1 border-l-1 border-grey-600 group-hover:border-blue-500 justify-center items-center rounded-tl rounded-bl bg-blue-50">
+        <div className="flex h-full w-10 border-t-1 border-b-1 border-l-1 border-grey-600 group-hover:border-blue-500 justify-center items-center rounded-tl rounded-bl bg-blue-50" >
           <BsSearch className="h-6 w-5" />
         </div>
 
         <input
-          className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0 rounded-none"
+          className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0 rounded-none focus:outline-none"
           placeholder={`Search`}
+          
         />
       </form>
 
@@ -201,7 +202,7 @@ export default function Header({}) {
       </div>
       {open ? (
         <div
-          className="flex absolute border-1 rounded bg-white right-2 top-14 w-48 h-60 shadow justify-center z-20"
+          className="flex absolute border-1 rounded bg-white right-2 top-14 w-48 h-40 shadow justify-center z-20"
           ref={openMenu}
         >
           {session ? (

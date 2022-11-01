@@ -95,7 +95,7 @@ export default function Home() {
 
   //sets array of all reddit's on load
   useEffect(() => {
-    console.log('runs')
+    console.log('setting reddits')
     onSnapshot(colRef, (snapshot) => {
       setCommunities([])
       snapshot.docs.forEach((doc) => {
