@@ -71,7 +71,7 @@ export default function Header({}) {
   }, [open, homeMenu])
 
   return (
-    <div className="flex border-b h-14 pt-2 pb-2 w-full  bg-white">
+    <header className="flex border-b h-14 pt-2 pb-2 w-full  bg-white">
       <Link href="/">
         <div className="flex w-14 h-full pl-2 pr-2 cursor-pointer items-center">
           <Image
@@ -99,7 +99,7 @@ export default function Header({}) {
       </Link>
 
       {/* home */}
-      <div
+      <nav
         className="flex items-center w-14 sm:w-56 hover:outline hover:outline-1 hover:outline-black mr-4 rounded-sm cursor-pointer relative"
         onClick={() => setHomeMenu(!homeMenu)}
         ref={homeButton}
@@ -115,7 +115,10 @@ export default function Header({}) {
             <div className="flex flex-col w-full">
               <div
                 className="flex gap-2 pl-2 py-1 mb-1 hover:bg-blue-100"
-                onClick={() => setOpenCreate(true)}
+                onClick={() => {
+                  setOpenCreate(true)
+                  router.push('/')
+                }}
               >
                 <AiOutlinePlus className="h-6 w-6" />
                 <p>Create a Community</p>
@@ -145,7 +148,7 @@ export default function Header({}) {
         </div>
 
         <FiChevronDown className="ml-auto" />
-      </div>
+      </nav>
 
       {/* search */}
       <form className="flex w-full mr-2 min-w-search hover:border-blue-500 group">
@@ -218,6 +221,6 @@ export default function Header({}) {
           )}
         </div>
       ) : null}
-    </div>
+    </header>
   )
 }
