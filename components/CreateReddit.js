@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { setDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
 
-export default function CreateReddit({ setOpenCreate }) {
+export default function CreateReddit({ setOpenCreate, bannerColor }) {
   const [communityContent, setComunityContent] = useState('')
 
   function handleCommunityChange(e) {
@@ -15,6 +15,7 @@ export default function CreateReddit({ setOpenCreate }) {
 
     await setDoc(doc(db, 'stuff', communityContent), {
       reddit: communityContent,
+      banner: bannerColor,
     })
 
     setOpenCreate(false)

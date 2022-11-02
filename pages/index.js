@@ -17,7 +17,6 @@ import CreateReddit from '../components/CreateReddit'
 import { useRedditContext } from '../components/context/reddit'
 import Banner from '../components/Banner'
 
-
 export default function Home() {
   const {
     reddit,
@@ -26,6 +25,8 @@ export default function Home() {
     setCommunities,
     openCreate,
     setOpenCreate,
+    redditColors,
+    setRedditColors,
   } = useRedditContext()
 
   const [timeDifference, setTimeDifference] = useState()
@@ -45,6 +46,13 @@ export default function Home() {
   const date2 = Date.now()
 
   const [testState, setTestState] = useState('test')
+
+  const [bannerColor, setBannerColor] = useState()
+
+  function getRandomColor() {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+    setBannerColor('#' + randomColor)
+  }
 
   function getDifferenceInDays(date1, date2) {
     const diffInMs = Math.abs(date2 - date1)
@@ -105,6 +113,17 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    console.log('setting reddits colors')
+    onSnapshot(colRef, (snapshot) => {
+      setRedditColors([])
+      snapshot.docs.forEach((doc) => {
+        setRedditColors((redditColors) => [...redditColors, doc.data().banner])
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   //calculate and sets time difference from post start to current date for each post
   useEffect(() => {
     posts.forEach((item) => {
@@ -118,6 +137,10 @@ export default function Home() {
       }
     })
   }, [posts])
+
+  useEffect(() => {
+    getRandomColor()
+  }, [])
 
   return (
     <div className="flex flex-col items-center min-w-[350px]">
@@ -138,9 +161,14 @@ export default function Home() {
           setOpenCreate={setOpenCreate}
           reddit={reddit}
           setReddit={setReddit}
+          bannerColor={bannerColor}
         />
       ) : null}
-      <Banner reddit={reddit} />
+      <Banner
+        reddit={reddit}
+        communities={communities}
+        redditColors={redditColors}
+      />
       <div className="flex w-full  h-screen mt-6 justify-center ">
         <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
           <CreatePost />

@@ -5,6 +5,7 @@ const RedditContext = createContext()
 export function RedditProvider({ children }) {
   const [reddit, setReddit] = useState('anime')
   const [communities, setCommunities] = useState([])
+  const [redditColors, setRedditColors] = useState([])
   const [openCreate, setOpenCreate] = useState(false)
 
   return (
@@ -16,6 +17,8 @@ export function RedditProvider({ children }) {
         setCommunities,
         openCreate,
         setOpenCreate,
+        redditColors,
+        setRedditColors,
       }}
     >
       {children}
