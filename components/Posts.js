@@ -162,6 +162,8 @@ export default function Posts({ posts, reddit, timeString }) {
     }
   }, [reddit, posts, postIndex])
 
+  
+
   return (
     <div className="flex  mt-4 flex-col ">
       {posts.map((item, index) => (

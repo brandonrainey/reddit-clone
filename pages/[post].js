@@ -277,7 +277,7 @@ export default function Post() {
     commentColorSnap()
   }, [currentComments, trigger])
 
-  console.log(reddit)
+  
 
   return (
     <div className="flex flex-col items-center">

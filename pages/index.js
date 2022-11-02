@@ -16,6 +16,7 @@ import { db } from '../firebase'
 import CreateReddit from '../components/CreateReddit'
 import { useRedditContext } from '../components/context/reddit'
 import Banner from '../components/Banner'
+import { useRouter } from 'next/router'
 
 export default function Home() {
   const {
@@ -28,6 +29,8 @@ export default function Home() {
     redditColors,
     setRedditColors,
   } = useRedditContext()
+
+  const router = useRouter()
 
   const [timeDifference, setTimeDifference] = useState()
 
@@ -142,6 +145,8 @@ export default function Home() {
     getRandomColor()
   }, [])
 
+  
+
   return (
     <div className="flex flex-col items-center min-w-[350px]">
       <Head>
@@ -166,8 +171,8 @@ export default function Home() {
       ) : null}
       <Banner
         reddit={reddit}
-        communities={communities}
-        redditColors={redditColors}
+      
+        
       />
       <div className="flex w-full  h-screen mt-6 justify-center ">
         <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
