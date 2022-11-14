@@ -1,10 +1,12 @@
+
 # Reddit Clone
 
-- Displays product image gallery/lightbox, with state to add and track items in cart.
+- Implements CRUD functionality of posts with comments on specific reddits
 
-- Ability to create and log in to account using Firebase Authentication.
+- Stores and fetches data using Firebase Firestore as a backend
 
-- Created using Next.js React framework, recreated visually following Frontend Mentor design challenge.
+- Created using Next.js React framework and styled with Tailwind CSS
+
 
 
 ## Demo
