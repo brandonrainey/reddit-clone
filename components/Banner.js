@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useRedditContext } from '../components/context/reddit'
 
 export default function Banner({ reddit }) {
-  const [redditIndex, setRedditIndex] = useState(0)
+  
 
-  const { communities, redditColors } = useRedditContext()
+  const { communities, redditColors, redditIndex, setRedditIndex } = useRedditContext()
 
   //finds current index of reddit array-- used for banner color
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function Banner({ reddit }) {
   }, [reddit, communities])
 
   return (
-    <div className="flex flex-col border-1 h-32 w-full items-center">
+    <div className="flex flex-col h-32 w-full items-center">
       <div
         className="h-3/4  w-full"
         style={{

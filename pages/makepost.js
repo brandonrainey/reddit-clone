@@ -69,7 +69,7 @@ export default function MakePost() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center bg-blue-100">
+    <div className="flex flex-col items-center bg-[#ededed]">
       <Header />
       <div className="flex w-11/12 max-w-3xl h-screen mt-6 flex-col ">
         <div
@@ -96,7 +96,7 @@ export default function MakePost() {
           </div>
         ) : null}
 
-        <div className="w-full border-2 border-grey max-h-[420px] h-1/2 bg-white shadow">
+        <div className="w-full border-1 border-grey max-h-[420px] h-1/2 bg-white shadow">
           <form onSubmit={sendPost} className="flex flex-col p-4">
             <input
               placeholder="Title "

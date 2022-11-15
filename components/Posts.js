@@ -168,10 +168,10 @@ export default function Posts({ posts, reddit, timeString }) {
     <div className="flex  mt-4 flex-col ">
       {posts.map((item, index) => (
         <div
-          className="flex mb-4 border-1 border-gray-300 rounded-sm"
+          className="flex mb-4 border-1 border-gray-300 rounded-md bg-white"
           key={index}
         >
-          <div className="flex flex-col items-center bg-gray-50 w-10 self-center">
+          <div className="flex flex-col items-center w-10 self-center">
             <IconContext.Provider
               value={{
                 color: `${

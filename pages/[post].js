@@ -280,10 +280,10 @@ export default function Post() {
   
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-[#ededed]">
       <Header />
       <Banner reddit={reddit} />
-      <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2">
+      <div className="flex border-l-2 border-r-2 w-full sm:w-1/2 h-auto pt-2 bg-white mt-4">
         <div className="flex flex-col items-center w-10">
           <IconContext.Provider
             value={{ color: `${color?.color == 'orange' ? color?.color : ''}` }}
@@ -361,17 +361,18 @@ export default function Post() {
       </div>
       <div className="border-2 w-full sm:w-1/2 h-auto mb-4">
         {currentComments.map((item, index) => (
-          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1" key={index}>
+          <div className="flex flex-col pl-4 pt-4 gap-2 border-b-1 bg-white" key={index}>
             <div className="flex pb-2 gap-2 text-sm font-medium">
               <BsReddit className="h-6 w-6" />
               {item?.user}
             </div>
             <div className="indent-6 pb-2">{item?.content}</div>
-            <div className="flex gap-1 ml-4 items-center">
+            <div className="flex gap-1 ml-4 items-center mb-1">
               <button
                 onClick={() => {
                   upvoteComment(item.id)
                 }}
+                
               >
                 <IconContext.Provider
                   value={{
@@ -383,7 +384,7 @@ export default function Post() {
                   }}
                 >
                   <TbArrowBigTop
-                    className={`w-5 h-5 cursor-pointer ${
+                    className={`w-5 h-5 cursor-pointer rounded ${
                       commentColor[index]?.voted == 'upvoted'
                         ? 'bg-orange-100'
                         : ''

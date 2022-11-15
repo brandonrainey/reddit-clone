@@ -174,7 +174,7 @@ export default function Home() {
       
         
       />
-      <div className="flex w-full  h-screen mt-6 justify-center ">
+      <div className="flex w-full  h-screen mt-6 justify-center bg-[#ededed]">
         <div className="w-full flex flex-col custom:max-w-2xl custom:p-0 small:px-6 ">
           <CreatePost />
           <Posts

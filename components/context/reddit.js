@@ -7,6 +7,7 @@ export function RedditProvider({ children }) {
   const [communities, setCommunities] = useState([])
   const [redditColors, setRedditColors] = useState([])
   const [openCreate, setOpenCreate] = useState(false)
+  const [redditIndex, setRedditIndex] = useState(0)
 
   return (
     <RedditContext.Provider
@@ -19,6 +20,8 @@ export function RedditProvider({ children }) {
         setOpenCreate,
         redditColors,
         setRedditColors,
+        redditIndex,
+        setRedditIndex
       }}
     >
       {children}
