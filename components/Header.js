@@ -159,7 +159,7 @@ export default function Header({}) {
         <input
           className="w-full bg-blue-50  border-t-1 border-r-1  border-b-1 border-grey-600 group-hover:border-blue-500 rounded-tr rounded-br focus:outline-0 rounded-none focus:outline-none"
           placeholder={`Search`}
-          
+          disabled={true}
         />
       </form>
 
